@@ -331,5 +331,13 @@ def delete_sale(sid):
     return jsonify({'message': '删除成功'})
 
 
+@app.after_request
+def add_cache_headers(response):
+    if request.path.startswith('/static/uploads/'):
+        response.cache_control.max_age = 604800  # 1 week
+        response.cache_control.public = True
+    return response
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)
