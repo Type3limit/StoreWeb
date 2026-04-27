@@ -325,10 +325,16 @@ def create_sale():
 @app.route('/api/sales/<int:sid>', methods=['DELETE'])
 def delete_sale(sid):
     conn = get_db()
+    sale = conn.execute("SELECT * FROM sales WHERE id = ?", (sid,)).fetchone()
+    if not sale:
+        conn.close()
+        return jsonify({'error': '记录不存在'}), 404
+    conn.execute("UPDATE products SET stock = stock + ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+                 (sale['quantity'], sale['product_id']))
     conn.execute("DELETE FROM sales WHERE id = ?", (sid,))
     conn.commit()
     conn.close()
-    return jsonify({'message': '删除成功'})
+    return jsonify({'message': '已回退'})
 
 
 @app.after_request

@@ -507,7 +507,7 @@ const App = {
         const sales = await this.api('/api/sales');
         const tbody = $('#sale-list');
         if (sales.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" class="empty">暂无销售记录</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="empty">暂无销售记录</td></tr>';
             return;
         }
         tbody.innerHTML = sales.map(s => `<tr>
@@ -516,11 +516,24 @@ const App = {
             <td>¥${s.total_price.toFixed(2)}</td>
             <td>${this.esc(s.note) || '-'}</td>
             <td>${this.fmtTime(s.created_at)}</td>
+            <td><button class="btn btn-xs btn-danger" data-revert="${s.id}">回退</button></td>
         </tr>`).join('');
     },
 
     bindSales() {
         $('#btn-add-sale').addEventListener('click', () => this.showSaleForm());
+        $('#sale-list').addEventListener('click', e => {
+            const btn = e.target.closest('[data-revert]');
+            if (btn) this.revertSale(btn.dataset.revert);
+        });
+    },
+
+    async revertSale(sid) {
+        if (!confirm('确定回退该笔交易？库存将自动恢复。')) return;
+        await this.api(`/api/sales/${sid}`, { method: 'DELETE' });
+        this.loadSales();
+        this.loadDashboard();
+        this.toast('交易已回退，库存已恢复');
     },
 
     async showSaleForm() {
