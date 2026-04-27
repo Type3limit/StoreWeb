@@ -1,6 +1,13 @@
 const $ = (sel, ctx) => (ctx || document).querySelector(sel);
 const $$ = (sel, ctx) => [...(ctx || document).querySelectorAll(sel)];
 
+const APP_BASE = (() => {
+    const scripts = document.getElementsByTagName('script');
+    const src = scripts[scripts.length - 1].src;
+    const i = src.lastIndexOf('/static/js/app.js');
+    return i > 0 ? src.substring(0, i + 1) : '/';
+})();
+
 const App = {
     init() {
         this.bindTabs();
@@ -31,6 +38,7 @@ const App = {
 
     // ---- API helper ----
     async api(url, options = {}) {
+        if (url.startsWith('/')) url = APP_BASE + url.slice(1);
         try {
             const res = await fetch(url, {
                 headers: { 'Content-Type': 'application/json' },
