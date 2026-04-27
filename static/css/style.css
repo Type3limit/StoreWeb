@@ -778,7 +778,8 @@ body {
     border-left: 2px solid var(--border);
     border-right: 2px solid var(--border);
     text-align: center; font-family: var(--font-brand);
-    font-size: 17px; font-weight: 700; background: var(--surface); outline: none;
+    font-size: 17px; font-weight: 700; background: var(--surface);
+    color: var(--text); outline: none;
 }
 
 /* Sale total */
