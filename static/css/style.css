@@ -66,6 +66,105 @@ body {
 .tab-panel.active { display: block; animation: fadeIn .25s; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
+/* ---- Overview Grid ---- */
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+}
+.ov-card {
+    background: var(--surface); border-radius: 14px; border: 1px solid var(--border);
+    box-shadow: var(--shadow); overflow: hidden; cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    display: flex; flex-direction: column;
+    -webkit-tap-highlight-color: transparent;
+}
+.ov-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.ov-card:active { transform: scale(.98); }
+.ov-card.sold-out { opacity: .55; pointer-events: none; }
+.ov-card-img-wrap {
+    width: 100%; padding-top: 75%; position: relative; overflow: hidden;
+    background: var(--bg);
+}
+.ov-card-img-wrap img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover;
+}
+.ov-card-img-wrap .ov-no-img {
+    position: absolute; inset: 0; display: flex; align-items: center;
+    justify-content: center; font-size: 48px; color: var(--text-secondary);
+}
+.ov-card-body { padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.ov-card-name {
+    font-size: 15px; font-weight: 600; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ov-card-meta { display: flex; justify-content: space-between; align-items: flex-end; }
+.ov-card-price { font-size: 22px; font-weight: 700; color: var(--primary); letter-spacing: -1px; }
+.ov-card-unit { font-size: 13px; color: var(--text-secondary); }
+.ov-card-stock { font-size: 12px; padding: 2px 8px; border-radius: 100px; font-weight: 600; align-self: flex-start; }
+.ov-card-stock.low { background: var(--danger-light); color: var(--danger); }
+.ov-card-stock.mid { background: var(--warn-light); color: var(--warn); }
+.ov-card-stock.ok { background: var(--success-light); color: var(--success); }
+
+/* Overview empty */
+.overview-empty { text-align: center; padding: 80px 20px; color: var(--text-secondary); grid-column: 1 / -1; }
+.overview-empty .empty-icon { font-size: 56px; margin-bottom: 12px; }
+.overview-empty .empty-text { font-size: 15px; }
+
+/* ---- Sale Modal ---- */
+.sale-modal-top {
+    display: flex; gap: 16px; align-items: center; margin-bottom: 24px;
+    padding-bottom: 16px; border-bottom: 1px solid var(--border);
+}
+.sale-modal-img {
+    width: 72px; height: 72px; border-radius: 10px; object-fit: cover;
+    flex-shrink: 0; background: var(--bg); border: 1px solid var(--border);
+}
+.sale-modal-info { flex: 1; }
+.sale-modal-name { font-size: 17px; font-weight: 700; }
+.sale-modal-unit-price { font-size: 14px; color: var(--text-secondary); margin-top: 2px; }
+.sale-modal-stock { font-size: 13px; font-weight: 600; margin-top: 2px; }
+.sale-modal-stock.low { color: var(--danger); }
+.sale-modal-stock.mid { color: var(--warn); }
+.sale-modal-stock.ok { color: var(--success); }
+
+/* Quantity stepper */
+.qty-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.qty-row label { font-size: 14px; font-weight: 600; color: var(--text-secondary); flex-shrink: 0; }
+.qty-stepper { display: flex; align-items: center; gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.qty-btn {
+    width: 44px; height: 44px; border: none; background: var(--bg); font-size: 20px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    color: var(--text); transition: background .1s; -webkit-tap-highlight-color: transparent;
+}
+.qty-btn:hover { background: var(--border); }
+.qty-btn:active { background: #d6d3d1; }
+.qty-val {
+    width: 56px; height: 44px; border: none; border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border); text-align: center; font-size: 18px;
+    font-weight: 700; background: var(--surface); outline: none;
+}
+
+/* Quick buttons */
+.quick-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.quick-btn {
+    padding: 6px 14px; border: 1px solid var(--border); border-radius: 20px;
+    font-size: 13px; font-weight: 500; cursor: pointer; background: var(--surface);
+    color: var(--text-secondary); transition: all .1s; -webkit-tap-highlight-color: transparent;
+}
+.quick-btn:hover { border-color: var(--primary); color: var(--primary); }
+.quick-btn:active { background: var(--primary-ghost); }
+
+/* Total */
+.sale-total {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px; background: var(--primary-light); border-radius: 10px;
+    margin-bottom: 4px;
+}
+.sale-total-label { font-size: 14px; font-weight: 600; color: var(--text-secondary); }
+.sale-total-value { font-size: 28px; font-weight: 700; color: var(--primary); letter-spacing: -1px; }
+
 /* Stat cards */
 .stat-grid {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -132,6 +231,7 @@ tbody tr:hover { background: #fafaf9; }
 .btn-danger:hover { background: var(--danger-light); }
 .btn-xs { padding: 4px 10px; font-size: 12px; border-radius: 6px; min-height: 30px; }
 .btn-group { display: flex; gap: 6px; }
+.btn-block { width: 100%; }
 
 /* Input / Select */
 .input, .select {
@@ -239,10 +339,16 @@ input[type="file"] { padding: 8px; }
     .card-body { padding: 12px; }
     th, td { padding: 10px 12px; font-size: 13px; }
 
-    /* Table -> horizontal scroll on tablet */
+    .overview-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+    .ov-card-body { padding: 10px; }
+    .ov-card-name { font-size: 14px; }
+    .ov-card-price { font-size: 18px; }
+
+    .sale-modal-img { width: 56px; height: 56px; }
+    .sale-total-value { font-size: 24px; }
+
     .table-wrap { overflow-x: auto; }
 
-    /* Mobile product cards */
     .pc-table { display: none; }
     .mobile-list { display: flex; flex-direction: column; gap: 10px; }
     .prod-card {
@@ -265,6 +371,9 @@ input[type="file"] { padding: 8px; }
 
 /* ---- Responsive: Phone ---- */
 @media (max-width: 480px) {
+    .overview-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .ov-card-name { font-size: 13px; }
+    .ov-card-price { font-size: 16px; }
     .stat-grid { grid-template-columns: 1fr 1fr; }
     .stat-card { padding: 12px 14px; }
     .stat-label { font-size: 12px; }
