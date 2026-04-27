@@ -35,6 +35,117 @@
     --font-body: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, sans-serif;
 
     --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --nav-blur: 16px;
+}
+
+/* ============ Theme: Cyberpunk Neon ============ */
+[data-theme="cyber"] {
+    --primary: #A855F7; --primary-hover: #9333EA;
+    --primary-light: #1A0A2E; --primary-ghost: #2D1B4E;
+    --primary-gradient: linear-gradient(135deg, #C084FC 0%, #A855F7 50%, #7E22CE 100%);
+    --bg: #0A0A1A; --surface: #12122A;
+    --text: #E8EAF6; --text-secondary: #818CF8;
+    --border: #1E1E40;
+    --success: #34D399; --success-light: #0A2E1A;
+    --danger: #FB7185; --danger-light: #2E0A15;
+    --warn: #FBBF24; --warn-light: #2E1F00;
+    --shadow-sm: 0 0 10px rgba(168,85,247,.15), 0 2px 4px rgba(0,0,0,.3);
+    --shadow-md: 0 0 20px rgba(168,85,247,.2), 0 4px 12px rgba(0,0,0,.4);
+    --shadow-lg: 0 0 40px rgba(168,85,247,.25), 0 8px 24px rgba(0,0,0,.5);
+    --shadow-press: 0 0 5px rgba(168,85,247,.1), inset 0 2px 4px rgba(0,0,0,.3);
+    --radius-sm: 8px; --radius: 12px; --radius-lg: 20px;
+    --font-brand: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --font-body: "PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+    --transition: 0.15s ease-out;
+    --nav-blur: 10px;
+}
+
+/* ============ Theme: Glassmorphism ============ */
+[data-theme="glass"] {
+    --primary: #2563EB; --primary-hover: #1D4ED8;
+    --primary-light: #EFF6FF; --primary-ghost: #DBEAFE;
+    --primary-gradient: linear-gradient(135deg, #60A5FA 0%, #2563EB 50%, #1D4ED8 100%);
+    --bg: #F8FAFC; --surface: rgba(255,255,255,.75);
+    --text: #0F172A; --text-secondary: #475569;
+    --border: rgba(148,163,184,.3);
+    --success: #10B981; --success-light: #ECFDF5;
+    --danger: #EF4444; --danger-light: #FEF2F2;
+    --warn: #F59E0B; --warn-light: #FFF7ED;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
+    --shadow-md: 0 4px 20px rgba(0,0,0,.08);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,.12);
+    --shadow-press: 0 1px 2px rgba(0,0,0,.08);
+    --radius-sm: 12px; --radius: 20px; --radius-lg: 28px;
+    --font-brand: "Inter","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --font-body: "PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+    --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+    --nav-blur: 20px;
+}
+
+/* ============ Theme: Nature Green ============ */
+[data-theme="nature"] {
+    --primary: #059669; --primary-hover: #047857;
+    --primary-light: #ECFDF5; --primary-ghost: #A7F3D0;
+    --primary-gradient: linear-gradient(135deg, #34D399 0%, #059669 50%, #047857 100%);
+    --bg: #F0FDF4; --surface: #FAFFFB;
+    --text: #064E3B; --text-secondary: #4B7B6A;
+    --border: #BBF7D0;
+    --success: #10B981; --success-light: #D1FAE5;
+    --danger: #DC2626; --danger-light: #FEF2F2;
+    --warn: #D97706; --warn-light: #FFF7ED;
+    --shadow-sm: 0 2px 8px rgba(5,150,105,.08), 0 1px 0 #D1FAE5;
+    --shadow-md: 0 6px 16px rgba(5,150,105,.10), 0 2px 0 #BBF7D0;
+    --shadow-lg: 0 10px 32px rgba(5,150,105,.14), 0 4px 0 #A7F3D0;
+    --shadow-press: inset 0 2px 6px rgba(5,150,105,.08);
+    --radius-sm: 12px; --radius: 20px; --radius-lg: 28px;
+    --font-brand: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --font-body: "PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+    --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+    --nav-blur: 12px;
+}
+
+/* ============ Theme: Vibrant Block ============ */
+[data-theme="vibrant"] {
+    --primary: #0891B2; --primary-hover: #0E7490;
+    --primary-light: #ECFEFF; --primary-ghost: #CFFAFE;
+    --primary-gradient: linear-gradient(135deg, #22D3EE 0%, #0891B2 50%, #0E7490 100%);
+    --bg: #F0FAFF; --surface: #FFFFFF;
+    --text: #164E63; --text-secondary: #0E7490;
+    --border: #A5F3FC;
+    --success: #22C55E; --success-light: #F0FDF4;
+    --danger: #DC2626; --danger-light: #FEF2F2;
+    --warn: #F59E0B; --warn-light: #FFF7ED;
+    --shadow-sm: 2px 2px 0 #A5F3FC;
+    --shadow-md: 4px 4px 0 #67E8F9;
+    --shadow-lg: 8px 8px 0 #22D3EE;
+    --shadow-press: 0px 0px 0 #A5F3FC, inset 2px 2px 4px rgba(0,0,0,.06);
+    --radius-sm: 6px; --radius: 12px; --radius-lg: 18px;
+    --font-brand: "Poppins","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --font-body: "PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+    --transition: 0.15s ease-out;
+    --nav-blur: 8px;
+}
+
+/* ============ Theme: Brutalism ============ */
+[data-theme="brutal"] {
+    --primary: #0F172A; --primary-hover: #1E293B;
+    --primary-light: #F8FAFC; --primary-ghost: #E2E8F0;
+    --primary-gradient: linear-gradient(135deg, #334155 0%, #0F172A 100%);
+    --bg: #FFFFFF; --surface: #FFFFFF;
+    --text: #020617; --text-secondary: #334155;
+    --border: #020617;
+    --success: #166534; --success-light: #F0FDF4;
+    --danger: #991B1B; --danger-light: #FEF2F2;
+    --warn: #854D0E; --warn-light: #FFF7ED;
+    --shadow-sm: 3px 3px 0 #020617;
+    --shadow-md: 5px 5px 0 #020617;
+    --shadow-lg: 8px 8px 0 #020617;
+    --shadow-press: 0px 0px 0 #020617;
+    --radius-sm: 0px; --radius: 0px; --radius-lg: 0px;
+    --font-brand: "Cormorant","PingFang SC","Microsoft YaHei",Georgia,serif;
+    --font-body: "Montserrat","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --transition: 0s;
+    --nav-blur: 0px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -497,6 +608,40 @@ input[type="file"] { padding: 9px 12px; }
 }
 
 .empty { text-align: center; padding: 40px 16px; color: var(--text-secondary); font-size: 14px; }
+
+/* ---- Settings / Theme Picker ---- */
+.settings-header { text-align: center; padding: 24px 0 28px; }
+.settings-header h2 { font-size: 24px; font-weight: 800; color: var(--text); }
+.settings-header p { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
+.theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+}
+.theme-card {
+    background: var(--surface); border: 2px solid var(--border);
+    border-radius: var(--radius); padding: 14px; cursor: pointer;
+    transition: all var(--transition); text-align: center;
+    box-shadow: var(--shadow-sm);
+    -webkit-tap-highlight-color: transparent;
+}
+.theme-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.theme-card:active { transform: scale(.97); }
+.theme-card.active { border-color: var(--primary); box-shadow: var(--shadow-md), 0 0 0 4px rgba(245,158,11,.12); }
+.theme-card.active .theme-check {
+    display: flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%; background: var(--primary-gradient);
+    color: #fff; font-size: 12px; margin: 0 auto 6px;
+}
+.theme-swatches {
+    display: flex; gap: 6px; justify-content: center; margin-bottom: 10px;
+}
+.theme-swatch {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 2px solid var(--border); flex-shrink: 0;
+}
+.theme-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.theme-desc { font-size: 11px; color: var(--text-secondary); margin-top: 4px; line-height: 1.3; }
 
 /* ---- Responsive: Tablet ---- */
 @media (max-width: 768px) {

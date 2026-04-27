@@ -12,11 +12,17 @@ const App = {
     productsCache: null,
 
     init() {
+        this.loadSavedTheme();
         this.bindTabs();
         this.bindProducts();
         this.bindStock();
         this.bindSales();
         this.loadOverview();
+    },
+
+    loadSavedTheme() {
+        const saved = localStorage.getItem('storeweb-theme');
+        if (saved) document.documentElement.dataset.theme = saved;
     },
 
     bindTabs() {
@@ -32,7 +38,8 @@ const App = {
                     dashboard: 'loadDashboard',
                     products: 'loadProducts',
                     stock: 'loadStockRecords',
-                    sales: 'loadSales'
+                    sales: 'loadSales',
+                    settings: 'loadSettings'
                 };
                 this[loaders[btn.dataset.tab]]();
             });
@@ -554,6 +561,65 @@ const App = {
             this.loadSales();
             this.toast('销售已记录');
         });
+    },
+
+    // ---- Theme / Settings ----
+    THEMES: [
+        {
+            id: 'clay', name: 'Claymorphism', desc: '软黏土风 · 琥珀暖色 · 3D 卡片',
+            swatches: ['#F59E0B', '#FEF7F2', '#FFFCF9', '#3B1F0B']
+        },
+        {
+            id: 'cyber', name: 'Cyberpunk', desc: '霓虹暗色 · 紫色光晕 · 赛博科技',
+            swatches: ['#A855F7', '#0A0A1A', '#12122A', '#E8EAF6']
+        },
+        {
+            id: 'glass', name: 'Glassmorphism', desc: '毛玻璃 · 蓝白通透 · 高级冷淡',
+            swatches: ['#2563EB', '#F8FAFC', '#EFF6FF', '#0F172A']
+        },
+        {
+            id: 'nature', name: 'Nature Green', desc: '自然绿意 · 清新明快 · 生机盎然',
+            swatches: ['#059669', '#F0FDF4', '#FAFFFB', '#064E3B']
+        },
+        {
+            id: 'vibrant', name: 'Vibrant Block', desc: '活力青蓝 · 块状投影 · 动感几何',
+            swatches: ['#0891B2', '#F0FAFF', '#FFFFFF', '#164E63']
+        },
+        {
+            id: 'brutal', name: 'Brutalism', desc: '粗野主义 · 直边高对比 · 极简硬核',
+            swatches: ['#0F172A', '#FFFFFF', '#020617', '#020617']
+        }
+    ],
+
+    applyTheme(id) {
+        document.documentElement.dataset.theme = id;
+        localStorage.setItem('storeweb-theme', id);
+        // Refresh active check in settings if visible
+        if ($('#tab-settings') && $('#tab-settings').classList.contains('active')) {
+            this.renderThemeCards();
+        }
+    },
+
+    renderThemeCards() {
+        const current = localStorage.getItem('storeweb-theme') || 'clay';
+        const grid = $('#theme-grid');
+        if (!grid) return;
+        grid.innerHTML = this.THEMES.map(t => `
+            <div class="theme-card${t.id === current ? ' active' : ''}" data-theme="${t.id}">
+                ${t.id === current ? '<div class="theme-check">✓</div>' : ''}
+                <div class="theme-swatches">${t.swatches.map(c => `<span class="theme-swatch" style="background:${c}"></span>`).join('')}</div>
+                <div class="theme-name">${t.name}</div>
+                <div class="theme-desc">${t.desc}</div>
+            </div>
+        `).join('');
+
+        grid.querySelectorAll('.theme-card').forEach(card => {
+            card.addEventListener('click', () => this.applyTheme(card.dataset.theme));
+        });
+    },
+
+    loadSettings() {
+        this.renderThemeCards();
     },
 
     // ---- Helpers ----
