@@ -17,14 +17,14 @@ const App = {
         this.loadDashboard();
     },
 
-    // ---- Tabs ----
     bindTabs() {
         $$('.nav-tab').forEach(btn => {
             btn.addEventListener('click', () => {
                 $$('.nav-tab').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 $$('.tab-panel').forEach(p => p.classList.remove('active'));
-                $(`#tab-${btn.dataset.tab}`).classList.add('active');
+                const panel = $(`#tab-${btn.dataset.tab}`);
+                if (panel) panel.classList.add('active');
                 const loaders = {
                     dashboard: 'loadDashboard',
                     products: 'loadProducts',
@@ -39,10 +39,13 @@ const App = {
     // ---- API helper ----
     async api(url, options = {}) {
         if (url.startsWith('/')) url = APP_BASE + url.slice(1);
+        const isForm = options.body instanceof FormData;
         try {
             const res = await fetch(url, {
-                headers: { 'Content-Type': 'application/json' },
-                ...options
+                ...options,
+                headers: isForm
+                    ? { ...(options.headers || {}) }
+                    : { 'Content-Type': 'application/json', ...(options.headers || {}) }
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || '请求失败');
@@ -53,7 +56,6 @@ const App = {
         }
     },
 
-    // ---- Toast ----
     toast(msg, type = 'success') {
         const el = document.createElement('div');
         el.className = `toast ${type}`;
@@ -62,7 +64,6 @@ const App = {
         setTimeout(() => { el.remove(); }, 2800);
     },
 
-    // ---- Modal ----
     openModal(title, bodyHtml) {
         $('#modal-box').innerHTML = `<h3>${title}</h3>${bodyHtml}`;
         $('#modal-overlay').classList.add('show');
@@ -74,7 +75,6 @@ const App = {
     // ---- Dashboard ----
     async loadDashboard() {
         const data = await this.api('/api/dashboard');
-        // Stats
         $('#stats').innerHTML = [
             { label: '商品总数', value: data.total_products, cls: '' },
             { label: '库存成本总值', value: `¥${data.total_stock_value}`, cls: 'accent' },
@@ -82,7 +82,6 @@ const App = {
             { label: '今日订单数', value: data.today_orders, cls: '' },
         ].map(s => `<div class="stat-card ${s.cls}"><span class="stat-label">${s.label}</span><span class="stat-value">${s.value}</span></div>`).join('');
 
-        // Low stock
         const low = data.low_stock;
         if (low.length === 0) {
             $('#low-stock').innerHTML = '<div class="empty">暂无低库存商品</div>';
@@ -92,7 +91,6 @@ const App = {
             ).join('')}</ul>`;
         }
 
-        // Recent sales
         const sales = data.recent_sales;
         if (sales.length === 0) {
             $('#recent-sales').innerHTML = '<div class="empty">暂无销售记录</div>';
@@ -107,59 +105,106 @@ const App = {
     },
 
     // ---- Products ----
+    imgCell(image) {
+        if (!image) return '<td><div class="product-thumb-placeholder">📦</div></td>';
+        const url = APP_BASE + image;
+        return `<td><img src="${this.esc(url)}" class="product-thumb" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="product-thumb-placeholder" style="display:none">📦</div></td>`;
+    },
+
     async loadProducts() {
         const search = $('#product-search').value;
         const products = await this.api(`/api/products?search=${encodeURIComponent(search)}`);
+
+        // Table rendering (desktop)
         const tbody = $('#product-list');
         if (products.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" class="empty">暂无商品，点击右上角「添加商品」开始</td></tr>';
-            return;
+            tbody.innerHTML = '<tr><td colspan="8" class="empty">暂无商品，点击右上角「添加商品」开始</td></tr>';
+        } else {
+            tbody.innerHTML = products.map(p => {
+                const stockCls = p.stock < 10 ? 'low' : p.stock < 30 ? 'mid' : 'ok';
+                return `<tr>
+                    ${this.imgCell(p.image)}
+                    <td><strong>${this.esc(p.name)}</strong></td>
+                    <td>${this.esc(p.category) || '-'}</td>
+                    <td>¥${p.cost_price.toFixed(2)}</td>
+                    <td>¥${p.sell_price.toFixed(2)}</td>
+                    <td><span class="stock-level ${stockCls}">${p.stock}</span></td>
+                    <td>${this.esc(p.unit)}</td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-xs" data-edit="${p.id}">编辑</button>
+                            <button class="btn btn-xs btn-danger" data-del="${p.id}">删除</button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
         }
-        tbody.innerHTML = products.map(p => {
-            const stockCls = p.stock < 10 ? 'low' : p.stock < 30 ? 'mid' : 'ok';
-            return `<tr>
-                <td><strong>${this.esc(p.name)}</strong></td>
-                <td>${this.esc(p.category) || '-'}</td>
-                <td>¥${p.cost_price.toFixed(2)}</td>
-                <td>¥${p.sell_price.toFixed(2)}</td>
-                <td><span class="stock-level ${stockCls}">${p.stock} ${this.esc(p.unit)}</span></td>
-                <td>${this.esc(p.unit)}</td>
-                <td>
-                    <div class="btn-group">
+
+        // Card rendering (mobile)
+        const cards = $('#product-cards');
+        if (products.length === 0) {
+            cards.innerHTML = '<div class="empty">暂无商品，点击右上角「添加商品」开始</div>';
+        } else {
+            cards.innerHTML = products.map(p => {
+                const stockCls = p.stock < 10 ? 'low' : p.stock < 30 ? 'mid' : 'ok';
+                const img = p.image
+                    ? `<img src="${this.esc(APP_BASE + p.image)}" class="prod-card-img" alt="" loading="lazy" onerror="this.replaceWith(this.nextElementSibling)">`
+                    : '';
+                return `<div class="prod-card">
+                    ${img || '<div class="prod-card-img">📦</div>'}
+                    <div class="prod-card-body">
+                        <div class="prod-card-title">${this.esc(p.name)}</div>
+                        <div class="prod-card-meta">${this.esc(p.category) || '-'} · ¥${p.sell_price.toFixed(2)}</div>
+                        <div class="prod-card-stock ${stockCls}">库存: ${p.stock} ${this.esc(p.unit)}</div>
+                    </div>
+                    <div class="prod-card-actions">
                         <button class="btn btn-xs" data-edit="${p.id}">编辑</button>
                         <button class="btn btn-xs btn-danger" data-del="${p.id}">删除</button>
                     </div>
-                </td>
-            </tr>`;
-        }).join('');
+                </div>`;
+            }).join('');
+        }
     },
 
     bindProducts() {
         $('#btn-add-product').addEventListener('click', () => this.showProductForm());
         $('#product-search').addEventListener('input', () => this.loadProducts());
-        $('#product-list').addEventListener('click', e => {
-            const editBtn = e.target.closest('[data-edit]');
-            const delBtn = e.target.closest('[data-del]');
-            if (editBtn) this.editProduct(editBtn.dataset.edit);
-            if (delBtn) this.deleteProduct(delBtn.dataset.del);
-        });
+        // Handle clicks in both table and mobile card list
+        $('#product-list').addEventListener('click', e => this._handleProductAction(e));
+        $('#product-cards').addEventListener('click', e => this._handleProductAction(e));
+    },
+
+    _handleProductAction(e) {
+        const editBtn = e.target.closest('[data-edit]');
+        const delBtn = e.target.closest('[data-del]');
+        if (editBtn) this.editProduct(editBtn.dataset.edit);
+        if (delBtn) this.deleteProduct(delBtn.dataset.del);
     },
 
     showProductForm(product = null) {
         const isEdit = !!product;
-        const title = isEdit ? '编辑商品' : '添加商品';
         const data = product || {};
-        this.openModal(title, `
+        const imgPreview = data.image
+            ? `<div class="img-preview"><img src="${this.esc(APP_BASE + data.image)}" alt="当前封面"></div>`
+            : '';
+        this.openModal(isEdit ? '编辑商品' : '添加商品', `
+            <div class="form-group">
+                <label>封面图</label>
+                <div class="img-upload">
+                    ${imgPreview}
+                    <input type="file" class="input" id="f-image" accept="image/*">
+                </div>
+            </div>
             <div class="form-group"><label>商品名称 *</label><input class="input" id="f-name" value="${this.esc(data.name || '')}" placeholder="如：发光手环"></div>
             <div class="form-row">
                 <div class="form-group"><label>分类</label><select class="select" id="f-cat">${['', '手工制品', '玩具', '饰品', '日用品', '其他'].map(c => `<option value="${c}" ${data.category === c ? 'selected' : ''}>${c || '请选择'}</option>`).join('')}</select></div>
                 <div class="form-group"><label>单位</label><select class="select" id="f-unit">${['个', '件', '套', '盒', '包', '对', '条'].map(u => `<option value="${u}" ${data.unit === u ? 'selected' : ''}>${u}</option>`).join('')}</select></div>
             </div>
             <div class="form-row">
-                <div class="form-group"><label>成本价 (¥)</label><input class="input" id="f-cost" type="number" step="0.01" value="${data.cost_price || 0}"></div>
-                <div class="form-group"><label>售价 (¥)</label><input class="input" id="f-sell" type="number" step="0.01" value="${data.sell_price || 0}"></div>
+                <div class="form-group"><label>成本价 (¥)</label><input class="input" id="f-cost" type="number" step="0.01" min="0" value="${data.cost_price || 0}"></div>
+                <div class="form-group"><label>售价 (¥)</label><input class="input" id="f-sell" type="number" step="0.01" min="0" value="${data.sell_price || 0}"></div>
             </div>
-            <div class="form-group"><label>初始库存</label><input class="input" id="f-stock" type="number" value="${data.stock || 0}"></div>
+            <div class="form-group"><label>初始库存</label><input class="input" id="f-stock" type="number" min="0" value="${data.stock || 0}"></div>
             <div class="btn-row">
                 <button class="btn" id="btn-cancel">取消</button>
                 <button class="btn btn-primary" id="btn-save">${isEdit ? '保存' : '添加'}</button>
@@ -167,23 +212,56 @@ const App = {
         `);
         $('#btn-cancel').addEventListener('click', () => this.closeModal());
         $('#btn-save').addEventListener('click', async () => {
-            const payload = {
-                name: $('#f-name').value.trim(),
-                category: $('#f-cat').value,
-                cost_price: parseFloat($('#f-cost').value) || 0,
-                sell_price: parseFloat($('#f-sell').value) || 0,
-                stock: parseInt($('#f-stock').value) || 0,
-                unit: $('#f-unit').value
-            };
-            if (!payload.name) return this.toast('请输入商品名称', 'error');
-            if (isEdit) {
-                await this.api(`/api/products/${product.id}`, { method: 'PUT', body: JSON.stringify(payload) });
+            const name = $('#f-name').value.trim();
+            if (!name) return this.toast('请输入商品名称', 'error');
+
+            const file = $('#f-image').files[0];
+            const method = isEdit ? 'PUT' : 'POST';
+            const url = isEdit ? `/api/products/${product.id}` : '/api/products';
+
+            if (file) {
+                const fd = new FormData();
+                fd.append('name', name);
+                fd.append('category', $('#f-cat').value);
+                fd.append('cost_price', parseFloat($('#f-cost').value) || 0);
+                fd.append('sell_price', parseFloat($('#f-sell').value) || 0);
+                fd.append('stock', parseInt($('#f-stock').value) || 0);
+                fd.append('unit', $('#f-unit').value);
+                fd.append('image', file);
+                await this.api(url, { method, body: fd });
             } else {
-                await this.api('/api/products', { method: 'POST', body: JSON.stringify(payload) });
+                const payload = {
+                    name,
+                    category: $('#f-cat').value,
+                    cost_price: parseFloat($('#f-cost').value) || 0,
+                    sell_price: parseFloat($('#f-sell').value) || 0,
+                    stock: parseInt($('#f-stock').value) || 0,
+                    unit: $('#f-unit').value
+                };
+                await this.api(url, { method, body: JSON.stringify(payload) });
             }
             this.closeModal();
             this.loadProducts();
             this.toast(isEdit ? '商品已更新' : '商品已添加');
+        });
+
+        // Preview selected image
+        $('#f-image').addEventListener('change', () => {
+            const file = $('#f-image').files[0];
+            if (!file) return;
+            const preview = $('#modal-box').querySelector('.img-preview');
+            if (preview) { preview.innerHTML = '<img src="" alt="预览">'; }
+            const reader = new FileReader();
+            reader.onload = e => {
+                const el = $('#modal-box').querySelector('.img-preview') || (() => {
+                    const div = document.createElement('div');
+                    div.className = 'img-preview';
+                    $('#f-image').closest('.img-upload').insertBefore(div, $('#f-image'));
+                    return div;
+                })();
+                el.innerHTML = `<img src="${e.target.result}" alt="预览">`;
+            };
+            reader.readAsDataURL(file);
         });
     },
 
@@ -276,7 +354,7 @@ const App = {
             <div class="form-group"><label>商品</label><select class="select" id="f-sale-pid">${products.map(p => `<option value="${p.id}" data-price="${p.sell_price}" data-stock="${p.stock}">${this.esc(p.name)} (库存: ${p.stock}, 售价: ¥${p.sell_price.toFixed(2)})</option>`).join('')}</select></div>
             <div class="form-row">
                 <div class="form-group"><label>数量</label><input class="input" id="f-sale-qty" type="number" min="1" value="1"></div>
-                <div class="form-group"><label>总价 (¥)</label><input class="input" id="f-sale-total" type="number" step="0.01"></div>
+                <div class="form-group"><label>总价 (¥)</label><input class="input" id="f-sale-total" type="number" step="0.01" min="0"></div>
             </div>
             <div class="form-group"><label>备注</label><input class="input" id="f-sale-note" placeholder="选填"></div>
             <div class="btn-row">
@@ -284,7 +362,6 @@ const App = {
                 <button class="btn btn-primary" id="btn-save">确认</button>
             </div>
         `);
-        // Auto-calc total when qty changes
         const updateTotal = () => {
             const sel = $('#f-sale-pid');
             const opt = sel.options[sel.selectedIndex];
@@ -320,13 +397,13 @@ const App = {
     },
     fmtTime(ts) {
         if (!ts) return '';
-        const d = new Date(ts + 'Z');
+        const d = new Date(ts.replace(' ', 'T') + (ts.includes('+') || ts.includes('Z') ? '' : 'Z'));
+        if (isNaN(d.getTime())) return ts;
         const pad = n => String(n).padStart(2, '0');
         return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
     }
 };
 
-// Modal overlay click to close
 document.getElementById('modal-overlay').addEventListener('click', e => {
     if (e.target === e.currentTarget) App.closeModal();
 });

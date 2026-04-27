@@ -4,7 +4,11 @@ from datetime import datetime, date
 from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
-DATABASE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'store.db')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATABASE = os.path.join(BASE_DIR, 'store.db')
+UPLOAD_DIR = os.path.join(BASE_DIR, 'static', 'uploads')
+
+ALLOWED_EXT = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
 
 
 def get_db():
@@ -26,6 +30,7 @@ def init_db():
                 sell_price REAL DEFAULT 0,
                 stock INTEGER DEFAULT 0,
                 unit TEXT DEFAULT '个',
+                image TEXT DEFAULT '',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
@@ -48,6 +53,37 @@ def init_db():
                 FOREIGN KEY (product_id) REFERENCES products(id)
             );
         ''')
+        try:
+            conn.execute("ALTER TABLE products ADD COLUMN image TEXT DEFAULT ''")
+        except sqlite3.OperationalError:
+            pass  # column already exists
+
+
+def _save_image(file):
+    if not file or not file.filename:
+        return ''
+    ext = os.path.splitext(file.filename)[1].lower()
+    if ext not in ALLOWED_EXT:
+        ext = '.jpg'
+    name = f'{datetime.now().strftime("%Y%m%d%H%M%S")}_{os.urandom(4).hex()}{ext}'
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+    file.save(os.path.join(UPLOAD_DIR, name))
+    return f'static/uploads/{name}'
+
+
+def _parse_fields(existing=None):
+    if request.is_json:
+        d = request.get_json() or {}
+        return {k: d.get(k, existing[k] if existing else '') for k in
+                ('name', 'category', 'cost_price', 'sell_price', 'stock', 'unit')}
+    return {
+        'name': request.form.get('name', existing['name'] if existing else '').strip(),
+        'category': request.form.get('category', existing['category'] if existing else ''),
+        'cost_price': float(request.form.get('cost_price', 0) or 0),
+        'sell_price': float(request.form.get('sell_price', 0) or 0),
+        'stock': int(request.form.get('stock', 0) or 0),
+        'unit': request.form.get('unit', existing['unit'] if existing else '个'),
+    }
 
 
 init_db()
@@ -114,17 +150,20 @@ def list_products():
 
 @app.route('/api/products', methods=['POST'])
 def create_product():
-    data = request.get_json()
-    name = data.get('name', '').strip()
-    if not name:
+    fields = _parse_fields()
+    if not fields['name']:
         return jsonify({'error': '商品名称不能为空'}), 400
+
+    image_path = ''
+    if not request.is_json:
+        image_path = _save_image(request.files.get('image'))
 
     conn = get_db()
     conn.execute(
-        """INSERT INTO products (name, category, cost_price, sell_price, stock, unit)
-           VALUES (?, ?, ?, ?, ?, ?)""",
-        (name, data.get('category', ''), data.get('cost_price', 0),
-         data.get('sell_price', 0), data.get('stock', 0), data.get('unit', '个'))
+        """INSERT INTO products (name, category, cost_price, sell_price, stock, unit, image)
+           VALUES (?, ?, ?, ?, ?, ?, ?)""",
+        (fields['name'], fields['category'], fields['cost_price'],
+         fields['sell_price'], fields['stock'], fields['unit'], image_path)
     )
     conn.commit()
     pid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
@@ -135,23 +174,24 @@ def create_product():
 
 @app.route('/api/products/<int:pid>', methods=['PUT'])
 def update_product(pid):
-    data = request.get_json()
     conn = get_db()
     existing = conn.execute("SELECT * FROM products WHERE id = ?", (pid,)).fetchone()
     if not existing:
         conn.close()
         return jsonify({'error': '商品不存在'}), 404
 
+    fields = _parse_fields(existing)
+    image_path = existing['image']
+    if not request.is_json:
+        file = request.files.get('image')
+        if file and file.filename:
+            image_path = _save_image(file)
+
     conn.execute(
         """UPDATE products SET name=?, category=?, cost_price=?, sell_price=?,
-           stock=?, unit=?, updated_at=CURRENT_TIMESTAMP WHERE id=?""",
-        (data.get('name', existing['name']),
-         data.get('category', existing['category']),
-         data.get('cost_price', existing['cost_price']),
-         data.get('sell_price', existing['sell_price']),
-         data.get('stock', existing['stock']),
-         data.get('unit', existing['unit']),
-         pid)
+           stock=?, unit=?, image=?, updated_at=CURRENT_TIMESTAMP WHERE id=?""",
+        (fields['name'], fields['category'], fields['cost_price'],
+         fields['sell_price'], fields['stock'], fields['unit'], image_path, pid)
     )
     conn.commit()
     row = conn.execute("SELECT * FROM products WHERE id = ?", (pid,)).fetchone()
