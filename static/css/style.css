@@ -35,6 +35,7 @@
     --font-body: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, sans-serif;
 
     --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --nav-bg: rgba(255,252,249,.85);
     --nav-blur: 16px;
 
     /* Semantic: elements that face across light/dark */
@@ -70,6 +71,7 @@
     --font-brand: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --font-body: "PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
     --transition: 0.15s ease-out;
+    --nav-bg: rgba(18,18,42,.85);
     --nav-blur: 10px;
     --tag-pos-text: #34D399;    --tag-pos-bg: #0A2E1A;
     --tag-neg-text: #FB7185;    --tag-neg-bg: #2E0A15;
@@ -103,6 +105,7 @@
     --font-brand: "Inter","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --font-body: "PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
     --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+    --nav-bg: rgba(255,255,255,.75);
     --nav-blur: 20px;
     --tag-pos-text: #065F46;    --tag-pos-bg: #D1FAE5;
     --tag-neg-text: #991B1B;    --tag-neg-bg: #FEF2F2;
@@ -136,6 +139,7 @@
     --font-brand: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --font-body: "PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
     --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+    --nav-bg: rgba(250,255,251,.85);
     --nav-blur: 12px;
     --tag-pos-text: #065F46;    --tag-pos-bg: #D1FAE5;
     --tag-neg-text: #991B1B;    --tag-neg-bg: #FEF2F2;
@@ -169,6 +173,7 @@
     --font-brand: "Poppins","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --font-body: "PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
     --transition: 0.15s ease-out;
+    --nav-bg: rgba(255,255,255,.85);
     --nav-blur: 8px;
     --tag-pos-text: #065F46;    --tag-pos-bg: #D1FAE5;
     --tag-neg-text: #991B1B;    --tag-neg-bg: #FEF2F2;
@@ -202,6 +207,7 @@
     --font-brand: "Cormorant","PingFang SC","Microsoft YaHei",Georgia,serif;
     --font-body: "Montserrat","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --transition: 0s;
+    --nav-bg: rgba(255,255,255,.95);
     --nav-blur: 0px;
     --tag-pos-text: #166534;    --tag-pos-bg: #F0FDF4;
     --tag-neg-text: #991B1B;    --tag-neg-bg: #FEF2F2;
@@ -233,6 +239,7 @@
     --font-brand: "Inter","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --transition: 0.15s ease;
+    --nav-bg: rgba(255,255,255,.90);
     --nav-blur: 0px;
     --tag-pos-text: #166534;    --tag-pos-bg: #F0FDF4;
     --tag-neg-text: #991B1B;    --tag-neg-bg: #FEF2F2;
@@ -266,6 +273,7 @@
     --font-brand: "Inter","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --transition: 0.15s ease;
+    --nav-bg: rgba(13,13,13,.90);
     --nav-blur: 4px;
     --tag-pos-text: #00FF88;    --tag-pos-bg: #0A1A0A;
     --tag-neg-text: #FF4444;    --tag-neg-bg: #1A0A0A;
@@ -299,6 +307,7 @@
     --font-brand: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --transition: 0.2s ease;
+    --nav-bg: rgba(232,236,242,.90);
     --nav-blur: 8px;
     --tag-pos-text: #3A6B4A;    --tag-pos-bg: #E8F2EA;
     --tag-neg-text: #8B4A4A;    --tag-neg-bg: #F2E8E8;
@@ -332,6 +341,7 @@
     --font-brand: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+    --nav-bg: rgba(18,6,46,.85);
     --nav-blur: 8px;
     --tag-pos-text: #05FFA1;    --tag-pos-bg: #0A2A1A;
     --tag-neg-text: #FF2D6B;    --tag-neg-bg: #2A0A15;
@@ -365,6 +375,7 @@
     --font-brand: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+    --nav-bg: rgba(255,255,255,.85);
     --nav-blur: 12px;
     --tag-pos-text: #3A6B4A;    --tag-pos-bg: #F0FFF4;
     --tag-neg-text: #8B4A5A;    --tag-neg-bg: #FFF0F3;
@@ -398,6 +409,7 @@
     --font-brand: "Lora","PingFang SC","Microsoft YaHei",Georgia,serif;
     --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --transition: 0.2s ease;
+    --nav-bg: rgba(253,245,230,.85);
     --nav-blur: 4px;
     --tag-pos-text: #4A6B3A;    --tag-pos-bg: #F0F5EB;
     --tag-neg-text: #8B4A4A;    --tag-neg-bg: #FBF0F0;
@@ -431,6 +443,7 @@
     --font-brand: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+    --nav-bg: rgba(255,255,255,.85);
     --nav-blur: 12px;
     --tag-pos-text: #065F46;    --tag-pos-bg: #ECFDF5;
     --tag-neg-text: #991B1B;    --tag-neg-bg: #FEF2F2;
@@ -464,6 +477,7 @@
     --font-brand: "Cormorant","PingFang SC","Microsoft YaHei",Georgia,serif;
     --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+    --nav-bg: rgba(18,18,42,.85);
     --nav-blur: 12px;
     --tag-pos-text: #4ADE80;    --tag-pos-bg: #0A1A10;
     --tag-neg-text: #FB7185;    --tag-neg-bg: #1A0A0E;
@@ -497,6 +511,7 @@
     --font-brand: "PingFang SC","Microsoft YaHei","Noto Serif SC",Georgia,serif;
     --font-body: "PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
     --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+    --nav-bg: rgba(253,249,243,.85);
     --nav-blur: 8px;
     --tag-pos-text: #4A6B4A;    --tag-pos-bg: #F0F5F0;
     --tag-neg-text: #8B4A4A;    --tag-neg-bg: #FBF0F0;
@@ -530,6 +545,7 @@
     --font-brand: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --transition: 0.15s ease-out;
+    --nav-bg: rgba(24,24,48,.85);
     --nav-blur: 8px;
     --tag-pos-text: #00FF88;    --tag-pos-bg: #0A1A10;
     --tag-neg-text: #FF3366;    --tag-neg-bg: #1A0A10;
@@ -561,7 +577,7 @@ body {
 /* Navbar */
 .navbar {
     position: sticky; top: 0; z-index: 100;
-    background: rgba(255,252,249,.85);
+    background: var(--nav-bg);
     backdrop-filter: blur(16px) saturate(120%);
     -webkit-backdrop-filter: blur(16px) saturate(120%);
     border-bottom: 2px solid var(--border);
