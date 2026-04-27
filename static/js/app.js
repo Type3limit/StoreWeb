@@ -455,29 +455,73 @@ const App = {
 
     // ---- Stock ----
     async loadStockRecords() {
-        const records = await this.api('/api/stock-records');
+        const [products, records] = await Promise.all([
+            this.api('/api/products'),
+            this.api('/api/stock-records')
+        ]);
+
+        // Product stock list with quick actions
+        const ptbody = $('#stock-products');
+        if (products.length === 0) {
+            ptbody.innerHTML = '<tr><td colspan="4" class="empty">暂无商品</td></tr>';
+        } else {
+            ptbody.innerHTML = products.map(p => {
+                const stockCls = p.stock < 10 ? 'low' : p.stock < 30 ? 'mid' : 'ok';
+                return `<tr>
+                    <td><strong>${this.esc(p.name)}</strong></td>
+                    <td><span class="stock-level ${stockCls}">${p.stock}</span></td>
+                    <td>${this.esc(p.unit)}</td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-xs stock-in-btn" data-pid="${p.id}" title="入库 +1">+1</button>
+                            <button class="btn btn-xs stock-out-btn" data-pid="${p.id}" title="出库 -1">−1</button>
+                            <button class="btn btn-xs" data-batch="${p.id}">批量</button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        // History
         const tbody = $('#stock-list');
         if (records.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" class="empty">暂无库存记录</td></tr>';
-            return;
+            tbody.innerHTML = '<tr><td colspan="5" class="empty">暂无操作记录</td></tr>';
+        } else {
+            tbody.innerHTML = records.map(r => `<tr>
+                <td><strong>${this.esc(r.product_name)}</strong></td>
+                <td><span class="badge badge-${r.type}">${r.type === 'in' ? '入库' : '出库'}</span></td>
+                <td>${r.quantity}</td>
+                <td>${this.esc(r.note) || '-'}</td>
+                <td>${this.fmtTime(r.created_at)}</td>
+            </tr>`).join('');
         }
-        tbody.innerHTML = records.map(r => `<tr>
-            <td><strong>${this.esc(r.product_name)}</strong></td>
-            <td><span class="badge badge-${r.type}">${r.type === 'in' ? '入库' : '出库'}</span></td>
-            <td>${r.quantity}</td>
-            <td>${this.esc(r.note) || '-'}</td>
-            <td>${this.fmtTime(r.created_at)}</td>
-        </tr>`).join('');
     },
 
     bindStock() {
-        $('#btn-add-stock').addEventListener('click', () => this.showStockForm());
+        // Quick +1/-1 stock actions
+        $('#stock-products').addEventListener('click', e => {
+            const inBtn = e.target.closest('.stock-in-btn');
+            const outBtn = e.target.closest('.stock-out-btn');
+            const batchBtn = e.target.closest('[data-batch]');
+            if (inBtn) this.quickStock(inBtn.dataset.pid, 'in', 1);
+            if (outBtn) this.quickStock(outBtn.dataset.pid, 'out', 1);
+            if (batchBtn) this.showStockForm(parseInt(batchBtn.dataset.pid));
+        });
     },
 
-    async showStockForm() {
+    async quickStock(pid, type, qty) {
+        await this.api('/api/stock-records', {
+            method: 'POST',
+            body: JSON.stringify({ product_id: parseInt(pid), type, quantity: qty, note: '' })
+        });
+        this.loadStockRecords();
+        this.toast(type === 'in' ? '已入库 +1' : '已出库 -1');
+    },
+
+    async showStockForm(preSelectPid = null) {
         const products = await this.api('/api/products');
         this.openModal(`<h3>入库 / 出库</h3>
-            <div class="form-group"><label>商品</label><select class="select" id="f-stock-pid">${products.map(p => `<option value="${p.id}">${this.esc(p.name)} (库存: ${p.stock})</option>`).join('')}</select></div>
+            <div class="form-group"><label>商品</label><select class="select" id="f-stock-pid">${products.map(p => `<option value="${p.id}"${p.id === preSelectPid ? ' selected' : ''}>${this.esc(p.name)} (库存: ${p.stock})</option>`).join('')}</select></div>
             <div class="form-group"><label>类型</label><select class="select" id="f-stock-type"><option value="in">入库（进货）</option><option value="out">出库（退货/损耗）</option></select></div>
             <div class="form-group"><label>数量</label><input class="input" id="f-stock-qty" type="number" min="1" value="1"></div>
             <div class="form-group"><label>备注</label><input class="input" id="f-stock-note" placeholder="选填"></div>

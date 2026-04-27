@@ -875,6 +875,11 @@ tbody tr:hover { background: var(--primary-light); }
 }
 .btn-primary:hover { filter: brightness(1.05); background: var(--primary-gradient); }
 .btn-primary:active { filter: brightness(.92); background: var(--primary-gradient); box-shadow: var(--shadow-press); }
+.stock-in-btn  { color: var(--stock-ok); border-color: #A7F3D0; font-weight: 700; }
+.stock-in-btn:hover  { background: var(--tag-pos-bg); }
+.stock-out-btn { color: var(--stock-lo); border-color: #FECACA; font-weight: 700; }
+.stock-out-btn:hover { background: var(--tag-neg-bg); }
+
 .btn-danger {
     color: var(--stock-lo); border-color: #FECACA;
     box-shadow: none;

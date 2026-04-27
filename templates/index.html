@@ -70,18 +70,20 @@
 
   <!-- Stock -->
   <section id="tab-stock" class="tab-panel">
-    <div class="toolbar">
-      <span></span>
-      <button class="btn btn-primary" id="btn-add-stock">+ 入库/出库</button>
-    </div>
-    <div class="card">
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-header">商品库存 · 快捷操作</div>
       <div class="card-body table-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>商品</th><th>类型</th><th>数量</th><th>备注</th><th>时间</th>
-            </tr>
-          </thead>
+          <thead><tr><th>商品</th><th>库存</th><th>单位</th><th>操作</th></tr></thead>
+          <tbody id="stock-products"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">最近记录</div>
+      <div class="card-body table-wrap">
+        <table>
+          <thead><tr><th>商品</th><th>类型</th><th>数量</th><th>备注</th><th>时间</th></tr></thead>
           <tbody id="stock-list"></tbody>
         </table>
       </div>
