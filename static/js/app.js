@@ -82,26 +82,28 @@ const App = {
     },
 
     // ---- Overview (POS) ----
+    _allProducts: [],
+
     async loadOverview() {
         const products = await this.api('/api/products');
-        this.productsCache = products;
-        const grid = $('#overview-grid');
+        this._allProducts = products;
+        this._renderOverviewCards(products);
+        this._renderCatFilter(products);
+        this._bindOverviewSearch();
+    },
 
+    _renderOverviewCards(products) {
+        const grid = $('#overview-grid');
         if (products.length === 0) {
-            grid.innerHTML = `<div class="overview-empty">
-                <div class="empty-icon">📦</div>
-                <div class="empty-text">还没有商品，去「商品管理」添加吧</div>
-            </div>`;
+            grid.innerHTML = '<div class="overview-empty"><div class="empty-icon">📦</div><div class="empty-text">没有匹配的商品</div></div>';
             return;
         }
-
         grid.innerHTML = products.map(p => {
             const stockCls = p.stock < 10 ? 'low' : p.stock < 30 ? 'mid' : 'ok';
             const soldOut = p.stock <= 0 ? ' sold-out' : '';
             const imgHtml = p.image
                 ? `<img src="${this.esc(APP_BASE + p.image)}" alt="" loading="lazy">`
                 : '<div class="ov-no-img">📦</div>';
-
             return `<div class="ov-card${soldOut}" data-pid="${p.id}">
                 <div class="ov-card-img-wrap">${imgHtml}</div>
                 <div class="ov-card-body">
@@ -118,7 +120,7 @@ const App = {
             </div>`;
         }).join('');
 
-        grid.addEventListener('click', e => {
+        grid.onclick = e => {
             const card = e.target.closest('.ov-card');
             if (!card || card.classList.contains('sold-out')) return;
             const pid = parseInt(card.dataset.pid);
@@ -128,6 +130,84 @@ const App = {
             const preSell = actionBtn && actionBtn.dataset.action === 'sale' ? 1 : 0;
             const preFree = actionBtn && actionBtn.dataset.action === 'free' ? 1 : 0;
             this.showOverviewSale(p, preSell, preFree);
+        };
+
+        // Context menu / long press for price edit
+        grid.oncontextmenu = e => {
+            const card = e.target.closest('.ov-card');
+            if (!card || card.classList.contains('sold-out')) return;
+            e.preventDefault();
+            const pid = parseInt(card.dataset.pid);
+            const p = products.find(x => x.id === pid);
+            if (p) this.showQuickPriceEdit(p);
+        };
+        let longPressTimer;
+        grid.addEventListener('touchstart', e => {
+            const card = e.target.closest('.ov-card');
+            if (!card || card.classList.contains('sold-out')) return;
+            longPressTimer = setTimeout(() => {
+                const pid = parseInt(card.dataset.pid);
+                const p = products.find(x => x.id === pid);
+                if (p) this.showQuickPriceEdit(p);
+            }, 800);
+        }, { passive: true });
+        grid.addEventListener('touchend', () => clearTimeout(longPressTimer));
+        grid.addEventListener('touchmove', () => clearTimeout(longPressTimer));
+    },
+
+    _renderCatFilter(products) {
+        const cats = [...new Set(products.map(p => p.category).filter(Boolean))];
+        const el = $('#cat-filter');
+        if (cats.length === 0) { el.innerHTML = ''; return; }
+        el.innerHTML = `<button class="cat-tag active" data-cat="">全部</button>${cats.map(c => `<button class="cat-tag" data-cat="${this.esc(c)}">${this.esc(c)}</button>`).join('')}`;
+        el.onclick = e => {
+            const tag = e.target.closest('.cat-tag');
+            if (!tag) return;
+            el.querySelectorAll('.cat-tag').forEach(t => t.classList.remove('active'));
+            tag.classList.add('active');
+            this._filterOverview();
+        };
+    },
+
+    _bindOverviewSearch() {
+        const input = $('#overview-search');
+        if (!input) return;
+        input.oninput = () => this._filterOverview();
+    },
+
+    _filterOverview() {
+        const search = ($('#overview-search')?.value || '').toLowerCase();
+        const cat = $('#cat-filter')?.querySelector('.cat-tag.active')?.dataset.cat || '';
+        const filtered = this._allProducts.filter(p => {
+            if (search && !p.name.toLowerCase().includes(search) && !(p.category || '').toLowerCase().includes(search)) return false;
+            if (cat && p.category !== cat) return false;
+            return true;
+        });
+        this._renderOverviewCards(filtered);
+    },
+
+    showQuickPriceEdit(product) {
+        this.openModal(`<h3>修改售价</h3>
+            <div style="font-size:15px;font-weight:600;margin-bottom:10px">${this.esc(product.name)}</div>
+            <div class="form-row">
+                <div class="form-group"><label>当前售价</label><div style="font-size:18px;font-weight:700;color:var(--primary)">¥${product.sell_price.toFixed(2)}</div></div>
+                <div class="form-group"><label>新售价 (¥)</label><input class="input" id="f-new-price" type="number" step="0.01" min="0" value="${product.sell_price}"></div>
+            </div>
+            <div class="btn-row">
+                <button class="btn" id="btn-cancel">取消</button>
+                <button class="btn btn-primary" id="btn-save">保存</button>
+            </div>
+        `);
+        $('#btn-cancel').addEventListener('click', () => this.closeModal());
+        $('#btn-save').addEventListener('click', async () => {
+            const newPrice = parseFloat($('#f-new-price').value) || 0;
+            await this.api(`/api/products/${product.id}`, {
+                method: 'PUT',
+                body: JSON.stringify({ ...product, sell_price: newPrice })
+            });
+            this.closeModal();
+            this.toast(`售价已更新: ¥${newPrice.toFixed(2)}`);
+            this.loadOverview();
         });
     },
 
@@ -257,10 +337,35 @@ const App = {
         const data = await this.api('/api/dashboard');
         $('#stats').innerHTML = [
             { label: '商品总数', value: data.total_products, cls: '' },
-            { label: '库存成本总值', value: `¥${data.total_stock_value}`, cls: 'accent' },
             { label: '今日销售额', value: `¥${data.today_sales}`, cls: 'accent' },
-            { label: '今日订单数', value: data.today_orders, cls: '' },
+            { label: '今日毛利', value: `¥${data.today_profit}`, cls: 'accent' },
+            { label: '今日赠品', value: `${data.today_giveaways} 件`, cls: '' },
         ].map(s => `<div class="stat-card ${s.cls}"><span class="stat-label">${s.label}</span><span class="stat-value">${s.value}</span></div>`).join('');
+
+        // Settlement
+        $('#settlement').innerHTML = `
+            <div class="settle-grid">
+                <div class="settle-item"><span class="settle-label">营业额</span><span class="settle-val">¥${data.today_sales}</span></div>
+                <div class="settle-item"><span class="settle-label">成本</span><span class="settle-val">¥${data.today_cost}</span></div>
+                <div class="settle-item"><span class="settle-label">毛利</span><span class="settle-val accent">¥${data.today_profit}</span></div>
+                <div class="settle-item"><span class="settle-label">售出订单</span><span class="settle-val">${data.today_orders_nonfree}</span></div>
+                <div class="settle-item"><span class="settle-label">赠送数量</span><span class="settle-val free">${data.today_giveaways}</span></div>
+                <div class="settle-item"><span class="settle-label">库存总值</span><span class="settle-val">¥${data.total_stock_value}</span></div>
+            </div>
+        `;
+
+        // Top products
+        const tp = data.top_products;
+        if (tp.length === 0) {
+            $('#top-products').innerHTML = '<div class="empty">今天还没有售出</div>';
+        } else {
+            $('#top-products').innerHTML = tp.map((x, i) =>
+                `<div class="sale-list-item">
+                    <div class="info"><span class="product">#${i+1} ${this.esc(x.name)}</span><span class="meta">${x.total_qty} 件</span></div>
+                    <span class="amount">¥${x.total_amt.toFixed(2)}</span>
+                </div>`
+            ).join('');
+        }
 
         const low = data.low_stock;
         if (low.length === 0) {
@@ -566,10 +671,17 @@ const App = {
 
     bindSales() {
         $('#btn-add-sale').addEventListener('click', () => this.showSaleForm());
+        $('#btn-export-today').addEventListener('click', () => this.exportCSV('today'));
+        $('#btn-export-all').addEventListener('click', () => this.exportCSV('all'));
         $('#sale-list').addEventListener('click', e => {
             const btn = e.target.closest('[data-revert]');
             if (btn) this.revertSale(btn.dataset.revert);
         });
+    },
+
+    exportCSV(period) {
+        const base = APP_BASE.slice(-1) === '/' ? APP_BASE : APP_BASE + '/';
+        window.open(base + 'api/sales/export?period=' + period, '_blank');
     },
 
     async revertSale(sid) {

@@ -880,6 +880,28 @@ tbody tr:hover { background: var(--primary-light); }
 .stock-out-btn { color: var(--stock-lo); border-color: #FECACA; font-weight: 700; }
 .stock-out-btn:hover { background: var(--tag-neg-bg); }
 
+/* Category filter tags */
+.cat-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.cat-tag {
+    padding: 6px 14px; border: 2px solid var(--border); border-radius: 20px;
+    font-size: 13px; font-weight: 600; cursor: pointer; background: var(--surface);
+    color: var(--text-secondary); transition: all var(--transition);
+    -webkit-tap-highlight-color: transparent;
+}
+.cat-tag:hover { border-color: var(--primary); color: var(--primary-hover); }
+.cat-tag.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* Settlement grid */
+.settle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.settle-item {
+    padding: 10px 12px; border-radius: var(--radius-sm); background: var(--bg);
+    display: flex; flex-direction: column; gap: 2px;
+}
+.settle-label { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
+.settle-val { font-size: 18px; font-weight: 800; color: var(--text); }
+.settle-val.accent { color: var(--primary); }
+.settle-val.free { color: var(--stock-lo); }
+
 .btn-danger {
     color: var(--stock-lo); border-color: #FECACA;
     box-shadow: none;

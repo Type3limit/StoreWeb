@@ -1,7 +1,8 @@
 import sqlite3
 import os
 from datetime import datetime, date
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, Response
+import csv, io
 
 app = Flask(__name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -112,6 +113,20 @@ def dashboard():
         "SELECT COUNT(*) FROM sales WHERE date(created_at) = ?",
         (today,)
     ).fetchone()[0]
+    today_orders_nonfree = conn.execute(
+        "SELECT COUNT(*) FROM sales WHERE date(created_at) = ? AND total_price > 0",
+        (today,)
+    ).fetchone()[0]
+    today_cost = conn.execute(
+        """SELECT COALESCE(SUM(s.quantity * p.cost_price), 0)
+           FROM sales s JOIN products p ON s.product_id = p.id
+           WHERE date(s.created_at) = ? AND s.total_price > 0""",
+        (today,)
+    ).fetchone()[0]
+    today_giveaways = conn.execute(
+        "SELECT COALESCE(SUM(quantity), 0) FROM sales WHERE date(created_at) = ? AND total_price = 0",
+        (today,)
+    ).fetchone()[0]
     low_stock = conn.execute(
         "SELECT id, name, stock, unit FROM products WHERE stock < 10 ORDER BY stock ASC LIMIT 10"
     ).fetchall()
@@ -120,6 +135,13 @@ def dashboard():
            FROM sales s JOIN products p ON s.product_id = p.id
            ORDER BY s.created_at DESC LIMIT 5"""
     ).fetchall()
+    top_products = conn.execute(
+        """SELECT p.name, SUM(s.quantity) as total_qty, SUM(s.total_price) as total_amt
+           FROM sales s JOIN products p ON s.product_id = p.id
+           WHERE date(s.created_at) = ? AND s.total_price > 0
+           GROUP BY p.id ORDER BY total_qty DESC LIMIT 3""",
+        (today,)
+    ).fetchall()
 
     conn.close()
     return jsonify({
@@ -127,9 +149,47 @@ def dashboard():
         'total_stock_value': round(total_stock_value, 2),
         'today_sales': round(today_sales, 2),
         'today_orders': today_orders,
+        'today_orders_nonfree': today_orders_nonfree,
+        'today_cost': round(today_cost, 2),
+        'today_profit': round(today_sales - today_cost, 2),
+        'today_giveaways': today_giveaways or 0,
         'low_stock': [dict(r) for r in low_stock],
-        'recent_sales': [dict(r) for r in recent_sales]
+        'recent_sales': [dict(r) for r in recent_sales],
+        'top_products': [dict(r) for r in top_products]
     })
+
+
+# ---- Export CSV ----
+@app.route('/api/sales/export')
+def export_sales():
+    period = request.args.get('period', 'all')
+    conn = get_db()
+    if period == 'today':
+        today = date.today().isoformat()
+        rows = conn.execute(
+            """SELECT s.id, p.name, s.quantity, s.total_price, s.note, s.created_at
+               FROM sales s JOIN products p ON s.product_id = p.id
+               WHERE date(s.created_at) = ? ORDER BY s.created_at DESC""",
+            (today,)
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            """SELECT s.id, p.name, s.quantity, s.total_price, s.note, s.created_at
+               FROM sales s JOIN products p ON s.product_id = p.id
+               ORDER BY s.created_at DESC"""
+        ).fetchall()
+    conn.close()
+
+    output = io.StringIO()
+    w = csv.writer(output)
+    w.writerow(['ID', '商品名称', '数量', '金额', '备注', '时间'])
+    for r in rows:
+        w.writerow([r['id'], r['name'], r['quantity'], f"{r['total_price']:.2f}",
+                     r['note'] or '', r['created_at']])
+    csv_data = output.getvalue()
+    output.close()
+    return Response(csv_data, mimetype='text/csv',
+                    headers={'Content-Disposition': 'attachment;filename=sales.csv'})
 
 
 # ---- Products ----

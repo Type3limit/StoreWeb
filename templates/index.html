@@ -29,6 +29,10 @@
 
   <!-- Overview (default POS page) -->
   <section id="tab-overview" class="tab-panel active">
+    <div class="toolbar">
+      <input type="text" class="input" id="overview-search" placeholder="搜索商品...">
+    </div>
+    <div class="cat-filter" id="cat-filter"></div>
     <div class="overview-grid" id="overview-grid"></div>
   </section>
 
@@ -36,6 +40,16 @@
   <section id="tab-dashboard" class="tab-panel">
     <div class="stat-grid" id="stats"></div>
     <div class="dash-row">
+      <div class="card">
+        <div class="card-header">今日结算</div>
+        <div class="card-body" id="settlement"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">今日热销 TOP3</div>
+        <div class="card-body" id="top-products"></div>
+      </div>
+    </div>
+    <div class="dash-row" style="margin-top:16px">
       <div class="card">
         <div class="card-header">低库存预警</div>
         <div class="card-body" id="low-stock"></div>
@@ -94,7 +108,11 @@
   <section id="tab-sales" class="tab-panel">
     <div class="toolbar">
       <span></span>
-      <button class="btn btn-primary" id="btn-add-sale">+ 记录销售</button>
+      <div class="btn-group">
+        <button class="btn" id="btn-export-today">导出今日</button>
+        <button class="btn" id="btn-export-all">导出全部</button>
+        <button class="btn btn-primary" id="btn-add-sale">+ 记录销售</button>
+      </div>
     </div>
     <div class="card">
       <div class="card-body table-wrap">
