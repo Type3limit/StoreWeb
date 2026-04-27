@@ -132,6 +132,10 @@ const App = {
                     <div class="sale-modal-stock ${stockCls}">库存: ${product.stock} ${this.esc(product.unit)}</div>
                 </div>
             </div>
+            <div class="sale-toggle" id="sale-toggle">
+                <button class="sale-toggle-btn active" data-mode="sale">售出</button>
+                <button class="sale-toggle-btn" data-mode="free">赠送</button>
+            </div>
             <div class="qty-row">
                 <label>数量</label>
                 <div class="qty-stepper">
@@ -146,8 +150,8 @@ const App = {
                 <button class="quick-btn" data-n="5">5</button>
                 <button class="quick-btn" data-n="10">10</button>
             </div>
-            <div class="sale-total">
-                <span class="sale-total-label">合计</span>
+            <div class="sale-total" id="sale-total-box">
+                <span class="sale-total-label" id="sale-total-label">合计</span>
                 <span class="sale-total-value" id="sale-total">¥${product.sell_price.toFixed(2)}</span>
             </div>
             <div class="form-group" style="margin-top:16px">
@@ -161,26 +165,48 @@ const App = {
         `);
 
         const price = product.sell_price;
-        const updateDisplay = (qty) => {
-            $('#sale-total').textContent = `¥${(price * qty).toFixed(2)}`;
-            $('#qty-val').value = qty;
+        let mode = 'sale';
+
+        const getEffectivePrice = () => mode === 'free' ? 0 : price;
+        const updateTotal = () => {
+            const qty = parseInt($('#qty-val').value) || 1;
+            const ep = getEffectivePrice();
+            $('#sale-total').textContent = ep === 0 ? '免费赠送' : `¥${(ep * qty).toFixed(2)}`;
+            $('#sale-total-box').className = ep === 0 ? 'sale-total free' : 'sale-total';
         };
         const getQty = () => parseInt($('#qty-val').value) || 1;
         const clampQty = (q) => Math.max(1, Math.min(q, product.stock));
 
+        // Mode toggle
+        $$('#sale-toggle .sale-toggle-btn').forEach(b => {
+            b.addEventListener('click', () => {
+                mode = b.dataset.mode;
+                $$('#sale-toggle .sale-toggle-btn').forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+                $('#btn-confirm').textContent = mode === 'free' ? '确认赠送' : '确认售出';
+                $('#sale-total-label').textContent = mode === 'free' ? '赠送' : '合计';
+                $('#f-note').value = mode === 'free' ? '赠送' : '';
+                updateTotal();
+            });
+        });
+
         $('#qty-minus').addEventListener('click', () => {
-            updateDisplay(clampQty(getQty() - 1));
+            $('#qty-val').value = clampQty(getQty() - 1);
+            updateTotal();
         });
         $('#qty-plus').addEventListener('click', () => {
-            updateDisplay(clampQty(getQty() + 1));
+            $('#qty-val').value = clampQty(getQty() + 1);
+            updateTotal();
         });
         $('#qty-val').addEventListener('input', () => {
-            updateDisplay(clampQty(getQty()));
+            $('#qty-val').value = clampQty(getQty());
+            updateTotal();
         });
 
         $$('.quick-btn').forEach(b => {
             b.addEventListener('click', () => {
-                updateDisplay(clampQty(parseInt(b.dataset.n)));
+                $('#qty-val').value = clampQty(parseInt(b.dataset.n));
+                updateTotal();
             });
         });
 
@@ -191,12 +217,14 @@ const App = {
             const payload = {
                 product_id: product.id,
                 quantity: qty,
-                total_price: price * qty,
-                note: $('#f-note').value.trim()
+                total_price: getEffectivePrice() * qty,
+                note: $('#f-note').value.trim() || (mode === 'free' ? '赠送' : '')
             };
             await this.api('/api/sales', { method: 'POST', body: JSON.stringify(payload) });
             this.closeModal();
-            this.toast(`售出: ${product.name} ×${qty}  ¥${(price * qty).toFixed(2)}`);
+            const label = mode === 'free' ? '赠送' : '售出';
+            const amt = mode === 'free' ? '' : `  ¥${(price * qty).toFixed(2)}`;
+            this.toast(`${label}: ${product.name} ×${qty}${amt}`);
             this.loadOverview();
         });
     },

@@ -164,6 +164,14 @@ body {
 }
 .sale-total-label { font-size: 14px; font-weight: 600; color: var(--text-secondary); }
 .sale-total-value { font-size: 28px; font-weight: 700; color: var(--primary); letter-spacing: -1px; }
+.sale-total.free { background: var(--danger-light); }
+.sale-total.free .sale-total-value { color: var(--danger); }
+
+/* Sale mode toggle */
+.sale-toggle { display: flex; gap: 0; margin-bottom: 18px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.sale-toggle-btn { flex: 1; padding: 10px; border: none; background: var(--surface); font-size: 14px; font-weight: 500; cursor: pointer; color: var(--text-secondary); transition: all .15s; min-height: 40px; -webkit-tap-highlight-color: transparent; }
+.sale-toggle-btn:hover { background: var(--bg); }
+.sale-toggle-btn.active { background: var(--primary); color: #fff; font-weight: 600; }
 
 /* Stat cards */
 .stat-grid {
