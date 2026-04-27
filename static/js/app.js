@@ -127,11 +127,14 @@ const App = {
             return `<div class="ov-card${soldOut}" data-pid="${p.id}">
                 <div class="ov-card-img-wrap">${imgHtml}</div>
                 <div class="ov-card-body">
-                    <div class="ov-card-name">${this.esc(p.name)}</div>
-                    <div class="ov-card-meta">
-                        <span class="ov-card-price">¥${p.sell_price.toFixed(2)}<span class="ov-card-unit"> /${this.esc(p.unit)}</span></span>
+                    <div class="ov-card-name-row">
+                        <div class="ov-card-name">${this.esc(p.name)}</div>
+                        <span class="ov-card-stock ${stockCls}">${p.stock <= 0 ? '售罄' : p.stock}</span>
                     </div>
-                    <span class="ov-card-stock ${stockCls}">${p.stock <= 0 ? '售罄' : '库存 ' + p.stock}</span>
+                    <div class="ov-card-price-row">
+                        <span class="ov-card-price">¥${p.sell_price.toFixed(2)}</span>
+                        <span class="ov-card-unit">/${this.esc(p.unit)}</span>
+                    </div>
                     ${soldOut ? '' : `<div class="ov-card-actions">
                         <button class="ov-act-btn sell" data-action="sale">售出</button>
                         <button class="ov-act-btn free" data-action="free">赠送</button>

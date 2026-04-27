@@ -653,7 +653,7 @@ body {
 .ov-card.sold-out { opacity: .45; filter: grayscale(.3); pointer-events: none; }
 
 .ov-card-img-wrap {
-    width: 100%; padding-top: 80%; position: relative; overflow: hidden;
+    width: 100%; padding-top: 66%; position: relative; overflow: hidden;
     background: var(--img-bg);
 }
 .ov-card-img-wrap img {
@@ -666,31 +666,34 @@ body {
     justify-content: center; font-size: 40px; opacity: .35;
 }
 
-.ov-card-body { padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 4px; }
+.ov-card-body { padding: 10px 14px 10px; display: flex; flex-direction: column; gap: 3px; }
+.ov-card-name-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; }
 .ov-card-name {
     font-family: var(--font-body); font-size: 14px; font-weight: 600;
     color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    flex: 1; min-width: 0;
 }
-.ov-card-meta { display: flex; justify-content: space-between; align-items: flex-end; }
-.ov-card-price {
-    font-family: var(--font-brand); font-size: 22px; font-weight: 800;
-    background: var(--primary-gradient);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: -1px;
-}
-.ov-card-unit { font-size: 12px; color: var(--text-secondary); -webkit-text-fill-color: var(--text-secondary); }
 .ov-card-stock {
-    font-size: 11px; padding: 2px 8px; border-radius: 100px;
-    font-weight: 600; align-self: flex-start; letter-spacing: .3px;
+    font-size: 10px; padding: 2px 7px; border-radius: 100px;
+    font-weight: 600; flex-shrink: 0; letter-spacing: .2px; white-space: nowrap;
 }
 .ov-card-stock.low { background: var(--tag-neg-bg); color: var(--stock-lo); border: 1px solid #FECACA; }
 .ov-card-stock.mid { background: var(--tag-warn-bg); color: var(--stock-md); border: 1px solid #FED7AA; }
 .ov-card-stock.ok  { background: var(--tag-pos-bg); color: var(--stock-ok); border: 1px solid #A7F3D0; }
 
+.ov-card-price-row { display: flex; align-items: baseline; gap: 3px; }
+.ov-card-price {
+    font-family: var(--font-brand); font-size: 22px; font-weight: 800;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -1px; line-height: 1.2;
+}
+.ov-card-unit { font-size: 12px; color: var(--text-secondary); -webkit-text-fill-color: var(--text-secondary); }
+
 /* Card action buttons */
 .ov-card-actions {
-    display: flex; gap: 0; margin-top: 10px;
+    display: flex; gap: 0; margin-top: 6px;
     border: 2px solid var(--border); border-radius: var(--radius-sm);
     overflow: hidden;
 }
@@ -1095,9 +1098,10 @@ input[type="file"] { padding: 9px 12px; }
     .stat-value { font-size: 24px; }
 
     .overview-grid { grid-template-columns: repeat(auto-fill, minmax(146px, 1fr)); gap: 12px; }
-    .ov-card-body { padding: 12px; }
+    .ov-card-body { padding: 10px 12px; }
     .ov-card-name { font-size: 13px; }
-    .ov-card-price { font-size: 19px; }
+    .ov-card-price { font-size: 18px; }
+    .ov-card-stock { font-size: 9px; padding: 1px 6px; }
 
     .modal {
         width: calc(100vw - 20px); max-width: none; margin: 8px auto;
@@ -1145,10 +1149,11 @@ input[type="file"] { padding: 9px 12px; }
 
     .overview-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .ov-card { border-radius: var(--radius); }
-    .ov-card-body { padding: 10px 12px; }
-    .ov-card-name { font-size: 13px; }
-    .ov-card-price { font-size: 17px; }
-    .ov-card-actions { margin-top: 8px; }
+    .ov-card-body { padding: 8px 10px; }
+    .ov-card-name { font-size: 12px; }
+    .ov-card-price { font-size: 16px; }
+    .ov-card-stock { font-size: 9px; }
+    .ov-card-actions { margin-top: 6px; }
     .ov-act-btn { padding: 6px 0; font-size: 12px; }
 
     .stat-grid { grid-template-columns: repeat(2, 1fr); }
