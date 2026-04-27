@@ -50,7 +50,7 @@ Description=StoreWeb - Warehouse Management
 After=network.target
 
 [Service]
-Type=forking
+Type=simple
 User=www-data
 Group=www-data
 WorkingDirectory=/opt/storeweb
