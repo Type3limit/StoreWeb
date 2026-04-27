@@ -873,8 +873,8 @@ tbody tr:hover { background: var(--primary-light); }
     box-shadow: var(--shadow-md);
     font-weight: 700;
 }
-.btn-primary:hover { filter: brightness(1.05); }
-.btn-primary:active { filter: brightness(.92); box-shadow: var(--shadow-press); }
+.btn-primary:hover { filter: brightness(1.05); background: var(--primary-gradient); }
+.btn-primary:active { filter: brightness(.92); background: var(--primary-gradient); box-shadow: var(--shadow-press); }
 .btn-danger {
     color: var(--stock-lo); border-color: #FECACA;
     box-shadow: none;
