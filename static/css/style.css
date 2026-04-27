@@ -167,11 +167,36 @@ body {
 .sale-total.free { background: var(--danger-light); }
 .sale-total.free .sale-total-value { color: var(--danger); }
 
-/* Sale mode toggle */
-.sale-toggle { display: flex; gap: 0; margin-bottom: 18px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-.sale-toggle-btn { flex: 1; padding: 10px; border: none; background: var(--surface); font-size: 14px; font-weight: 500; cursor: pointer; color: var(--text-secondary); transition: all .15s; min-height: 40px; -webkit-tap-highlight-color: transparent; }
-.sale-toggle-btn:hover { background: var(--bg); }
-.sale-toggle-btn.active { background: var(--primary); color: #fff; font-weight: 600; }
+/* Card action buttons */
+.ov-card-actions {
+    display: flex; gap: 0; margin-top: 8px;
+    border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
+}
+.ov-act-btn {
+    flex: 1; padding: 6px 0; border: none; font-size: 13px; font-weight: 500;
+    cursor: pointer; background: var(--surface); color: var(--text-secondary);
+    transition: all .12s; -webkit-tap-highlight-color: transparent;
+}
+.ov-act-btn.sell { color: var(--primary-hover); }
+.ov-act-btn.sell:hover { background: var(--primary-ghost); }
+.ov-act-btn.free:hover { background: var(--bg); }
+.ov-act-btn:first-child { border-right: 1px solid var(--border); }
+
+/* Split sell/free rows in modal */
+.split-row {
+    display: flex; gap: 10px; margin-bottom: 14px;
+}
+.split-side {
+    flex: 1; background: var(--bg); border-radius: 10px; padding: 12px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.split-side.sell { background: var(--primary-light); border: 1px solid var(--primary-ghost); }
+.split-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+.split-side.sell .split-label { color: var(--primary-hover); }
+.split-side .qty-stepper { border-color: transparent; }
+.split-side .qty-btn { background: var(--surface); }
+.split-sub { font-size: 13px; font-weight: 600; color: var(--primary); }
+.split-sub.free-sub { color: var(--text-secondary); }
 
 /* Stat cards */
 .stat-grid {
