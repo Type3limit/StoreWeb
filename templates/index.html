@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoreWeb - 仓储管理</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <span class="nav-brand">StoreWeb</span>
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-tab="dashboard">仪表盘</button>
+      <button class="nav-tab" data-tab="products">商品管理</button>
+      <button class="nav-tab" data-tab="stock">库存管理</button>
+      <button class="nav-tab" data-tab="sales">销售记录</button>
+    </div>
+  </div>
+</nav>
+
+<main class="main">
+
+  <!-- Dashboard -->
+  <section id="tab-dashboard" class="tab-panel active">
+    <div class="stat-grid" id="stats"></div>
+    <div class="dash-row">
+      <div class="card">
+        <div class="card-header">低库存预警</div>
+        <div class="card-body" id="low-stock"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">最近销售</div>
+        <div class="card-body" id="recent-sales"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section id="tab-products" class="tab-panel">
+    <div class="toolbar">
+      <input type="text" class="input" id="product-search" placeholder="搜索商品名称或分类...">
+      <button class="btn btn-primary" id="btn-add-product">+ 添加商品</button>
+    </div>
+    <div class="card">
+      <div class="card-body table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>名称</th><th>分类</th><th>成本价</th><th>售价</th><th>库存</th><th>单位</th><th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="product-list"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stock -->
+  <section id="tab-stock" class="tab-panel">
+    <div class="toolbar">
+      <span></span>
+      <button class="btn btn-primary" id="btn-add-stock">+ 入库/出库</button>
+    </div>
+    <div class="card">
+      <div class="card-body table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>商品</th><th>类型</th><th>数量</th><th>备注</th><th>时间</th>
+            </tr>
+          </thead>
+          <tbody id="stock-list"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sales -->
+  <section id="tab-sales" class="tab-panel">
+    <div class="toolbar">
+      <span></span>
+      <button class="btn btn-primary" id="btn-add-sale">+ 记录销售</button>
+    </div>
+    <div class="card">
+      <div class="card-body table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>商品</th><th>数量</th><th>金额</th><th>备注</th><th>时间</th>
+            </tr>
+          </thead>
+          <tbody id="sale-list"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Modals -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal-box"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container" id="toast-container"></div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
