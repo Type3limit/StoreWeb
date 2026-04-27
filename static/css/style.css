@@ -781,8 +781,10 @@ body {
     border-left: 2px solid var(--border);
     border-right: 2px solid var(--border);
     text-align: center; font-family: var(--font-brand);
-    font-size: 17px; font-weight: 700; background: var(--surface);
-    color: var(--text); outline: none;
+    font-size: 17px; font-weight: 700;
+    background: var(--surface); color: var(--text);
+    -webkit-text-fill-color: var(--text);
+    outline: none;
 }
 
 /* Sale total */
@@ -935,6 +937,7 @@ tbody tr:hover { background: var(--primary-light); }
     padding: 11px 16px; border: 2px solid var(--border); border-radius: var(--radius-sm);
     font-family: var(--font-body); font-size: 14px;
     background: var(--surface); color: var(--text);
+    -webkit-text-fill-color: var(--text);
     outline: none; transition: all var(--transition); width: 100%;
     min-height: 44px;
 }
