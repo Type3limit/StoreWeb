@@ -15,10 +15,12 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
     if (e.request.method !== 'GET') return;
+    const url = e.request.url;
+    if (!url.startsWith('http')) return;  // skip chrome-extension, etc.
     e.respondWith(
         caches.match(e.request).then(cached =>
             cached || fetch(e.request).then(resp => {
-                if (resp.ok && resp.type === 'basic') {
+                if (resp.ok && resp.status !== 206) {
                     const clone = resp.clone();
                     caches.open(CACHE).then(c => c.put(e.request, clone));
                 }
