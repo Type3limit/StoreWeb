@@ -59,6 +59,7 @@ const App = {
                     products: 'loadProducts',
                     stock: 'loadStockRecords',
                     sales: 'loadSales',
+                    help: 'loadHelp',
                     settings: 'loadSettings'
                 };
                 this[loaders[btn.dataset.tab]]();
@@ -902,6 +903,116 @@ const App = {
 
     loadSettings() {
         this.renderThemeCards();
+    },
+
+    loadHelp() {
+        const el = $('#help-content');
+        if (!el) return;
+        el.innerHTML = `
+<div class="help-section">
+<h2>StoreWeb 操作指南</h2>
+<p>夜市摆摊 · 仓储管理 · 收银一体</p>
+</div>
+
+<div class="help-card">
+<div class="help-title">1. 商品总览 — 收银台</div>
+<div class="help-body">
+<p>默认首页，所有商品以大卡片展示（封面图 + 名称 + 售价）。</p>
+<ul>
+<li><b>售出/赠送</b>：点击卡片任一区域弹出销售面板。可分别输入售出数量和赠送数量，系统自动计算总价（赠送金额为 0），<b>一次确认同时写入两条记录</b>。</li>
+<li><b>快捷按钮</b>：卡片底部「售出」「赠送」直达按钮，点击后弹窗预填对应数量 1。</li>
+<li><b>搜索</b>：顶部搜索框输入关键字即时过滤商品。</li>
+<li><b>分类筛选</b>：搜索框下方分类标签，点「玩具」只看玩具。</li>
+<li><b>改价</b>：长按卡片（手机）或右键（电脑）→ 弹出快捷改价窗口，输入新售价保存。</li>
+<li><b>售罄</b>：库存为 0 的商品自动灰显，不可点击。</li>
+</ul>
+</div>
+</div>
+
+<div class="help-card">
+<div class="help-title">2. 仪表盘 — 今日结算</div>
+<div class="help-body">
+<ul>
+<li><b>统计卡片</b>：今日销售额、昨日对比、本周累计、本月累计。</li>
+<li><b>结算面板</b>：营业额 / 成本 / 毛利 / 售出订单数 / 赠送数量 / 库存总值。</li>
+<li><b>热销 TOP3</b>：今日销量最高的 3 个商品排行。</li>
+<li><b>低库存预警</b>：库存 < 10 的商品列表，浏览器通知提醒补货（首次使用需授权）。</li>
+<li><b>最近销售</b>：最新 5 笔交易记录。</li>
+</ul>
+</div>
+</div>
+
+<div class="help-card">
+<div class="help-title">3. 商品管理 — 增删改查</div>
+<div class="help-body">
+<ul>
+<li><b>添加商品</b>：右上角「+ 添加商品」→ 填写名称、分类、成本价、售价、初始库存、单位，可选上传封面图。</li>
+<li><b>编辑</b>：列表中每行「编辑」按钮 → 弹窗修改任意信息。</li>
+<li><b>删除</b>：「删除」按钮 → 确认后删除商品及关联的库存和销售记录。</li>
+<li><b>搜索</b>：顶部搜索框按名称或分类筛选。</li>
+<li><b>封面图</b>：选图后浏览器本地压缩（最长边 400px）再上传，2M 带宽秒传。</li>
+<li><b>全场调价</b>：「全场调价」按钮 → 输入百分比（80 = 八折，120 = 涨价20%）→ 一键批量改售价。</li>
+</ul>
+</div>
+</div>
+
+<div class="help-card">
+<div class="help-title">4. 库存管理 — 快捷操作</div>
+<div class="help-body">
+<ul>
+<li><b>快捷增减</b>：每个商品行有 <code>+1</code> / <code>−1</code> 按钮，点击即时入库/出库 1 件，无需弹窗。</li>
+<li><b>批量操作</b>：「批量」按钮 → 弹窗选择商品、类型（入库/出库）、数量、备注。</li>
+<li><b>记录追溯</b>：下半部分显示所有入库/出库操作历史。</li>
+</ul>
+</div>
+</div>
+
+<div class="help-card">
+<div class="help-title">5. 销售记录 — 回退 & 导出</div>
+<div class="help-body">
+<ul>
+<li><b>回退交易</b>：每行末尾「回退」按钮 → 确认后删除该笔销售，库存自动恢复。</li>
+<li><b>导出今日</b>：下载今天所有销售为 CSV 文件，Excel 直接打开。</li>
+<li><b>导出全部</b>：下载所有历史销售数据。</li>
+<li><b>手动记录</b>：「+ 记录销售」可手动添加一笔销售（非 POS 流程）。</li>
+</ul>
+</div>
+</div>
+
+<div class="help-card">
+<div class="help-title">6. 设置 — 主题切换</div>
+<div class="help-body">
+<ul>
+<li>共 <b>16 种</b>视觉主题：Claymorphism / Cyberpunk / Glassmorphism / Nature Green / Vibrant Block / Brutalism / Swiss Minimal / OLED Dark / Neumorphism / Vaporwave / Pastel Candy / Vintage Film / Ocean Blue / Midnight Gold / Zen Garden / Neon Pop。</li>
+<li>点击色块卡片即时切换，选择自动保存到浏览器，下次打开保持。</li>
+</ul>
+</div>
+</div>
+
+<div class="help-card">
+<div class="help-title">7. 手机端使用</div>
+<div class="help-body">
+<ul>
+<li><b>PWA 安装</b>：Chrome 地址栏安装按钮 / Safari 分享菜单「添加到主屏幕」，像原生 App 一样用。</li>
+<li><b>安卓 APK</b>：独立 App，全屏 WebView，支持文件上传和通知权限。</li>
+<li><b>震动反馈</b>：售出/赠送/库存操作确认时手机短震。</li>
+<li><b>触控优化</b>：最小 44px 触控区、禁用下拉刷新、长按改价。</li>
+</ul>
+</div>
+</div>
+
+<div class="help-card">
+<div class="help-title">8. 其他技巧</div>
+<div class="help-body">
+<ul>
+<li><b>库存不足保护</b>：售出/出库时自动检查库存，超量会拦截提示。</li>
+<li><b>售价自动计算</b>：POS 弹窗选数量后总价自动更新。</li>
+<li><b>数据安全</b>：所有数据存储在服务器 SQLite 数据库，部署目录 <code>/home/ubuntu/StoreWeb/store.db</code>。建议定期备份。</li>
+<li><b>服务器更新</b>：<code>cd ~/StoreWeb && git pull origin master && sudo systemctl restart storeweb</code></li>
+</ul>
+</div>
+</div>
+`;
     },
 
     // ---- Helpers ----
