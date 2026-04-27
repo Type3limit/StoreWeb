@@ -23,7 +23,7 @@ const App = {
 
     registerSW() {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(APP_BASE + 'static/sw.js');
+            navigator.serviceWorker.register(APP_BASE + 'sw.js', { scope: APP_BASE });
         }
     },
 

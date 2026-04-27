@@ -95,6 +95,19 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/manifest.json')
+def manifest():
+    return app.send_static_file('manifest.json')
+
+
+@app.route('/sw.js')
+def service_worker():
+    resp = app.make_response(app.send_static_file('sw.js'))
+    resp.headers['Service-Worker-Allowed'] = '/'
+    resp.headers['Content-Type'] = 'application/javascript'
+    return resp
+
+
 # ---- Dashboard ----
 @app.route('/api/dashboard')
 def dashboard():
