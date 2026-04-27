@@ -385,7 +385,8 @@ const App = {
             const name = $('#f-name').value.trim();
             if (!name) return this.toast('请输入商品名称', 'error');
 
-            const file = $('#f-image').files[0];
+            let file = $('#f-image').files[0];
+            if (file) file = await this.compressImage(file);
             const method = isEdit ? 'PUT' : 'POST';
             const url = isEdit ? `/api/products/${product.id}` : '/api/products';
 
@@ -568,6 +569,33 @@ const App = {
         if (isNaN(d.getTime())) return ts;
         const pad = n => String(n).padStart(2, '0');
         return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    },
+
+    compressImage(file, maxSize = 400, quality = 0.75) {
+        return new Promise((resolve) => {
+            if (!file.type.startsWith('image/')) return resolve(file);
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = new Image();
+                img.onload = () => {
+                    let w = img.width, h = img.height;
+                    if (w <= maxSize && h <= maxSize) return resolve(file);
+                    const ratio = Math.min(maxSize / w, maxSize / h);
+                    w = Math.round(w * ratio);
+                    h = Math.round(h * ratio);
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    canvas.toBlob(blob => {
+                        resolve(blob ? new File([blob], file.name, { type: 'image/jpeg' }) : file);
+                    }, 'image/jpeg', quality);
+                };
+                img.onerror = () => resolve(file);
+                img.src = e.target.result;
+            };
+            reader.onerror = () => resolve(file);
+            reader.readAsDataURL(file);
+        });
     }
 };
 
