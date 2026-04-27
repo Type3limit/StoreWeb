@@ -203,6 +203,345 @@
     --font-body: "Montserrat","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
     --transition: 0s;
     --nav-blur: 0px;
+    --tag-pos-text: #166534;    --tag-pos-bg: #F0FDF4;
+    --tag-neg-text: #991B1B;    --tag-neg-bg: #FEF2F2;
+    --tag-warn-text: #854D0E;   --tag-warn-bg: #FFF7ED;
+    --stock-lo: #991B1B;        --stock-md: #854D0E;        --stock-ok: #166534;
+    --btn-hover: #F8FAFC;       --btn-active: #E2E8F0;
+    --btn-danger-hover: #FEF2F2;
+    --sell-color: #020617;      --sell-hover: #F8FAFC;
+    --free-hover: #F8FAFC;
+    --header-bg: #F8FAFC;
+    --img-bg: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+    --card-ov-bg: var(--surface);
+}
+
+/* ============ Theme: Swiss Minimal ============ */
+[data-theme="swiss"] {
+    --primary: #000000; --primary-hover: #333333;
+    --primary-light: #F5F5F5; --primary-ghost: #E5E5E5;
+    --primary-gradient: linear-gradient(135deg, #333 0%, #000 100%);
+    --bg: #FAFAFA; --surface: #FFFFFF;
+    --text: #000000; --text-secondary: #666666;
+    --border: #D4D4D4;
+    --success: #16A34A; --success-light: #F0FDF4;
+    --danger: #DC2626; --danger-light: #FEF2F2;
+    --warn: #CA8A04; --warn-light: #FEFCE8;
+    --shadow-sm: none; --shadow-md: none;
+    --shadow-lg: none; --shadow-press: none;
+    --radius-sm: 0px; --radius: 0px; --radius-lg: 0px;
+    --font-brand: "Inter","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --transition: 0.15s ease;
+    --nav-blur: 0px;
+    --tag-pos-text: #166534;    --tag-pos-bg: #F0FDF4;
+    --tag-neg-text: #991B1B;    --tag-neg-bg: #FEF2F2;
+    --tag-warn-text: #854D0E;   --tag-warn-bg: #FFF7ED;
+    --stock-lo: #DC2626;        --stock-md: #CA8A04;        --stock-ok: #16A34A;
+    --btn-hover: #F5F5F5;       --btn-active: #E5E5E5;
+    --btn-danger-hover: #FEF2F2;
+    --sell-color: #000000;      --sell-hover: #F5F5F5;
+    --free-hover: #F5F5F5;
+    --header-bg: #F5F5F5;
+    --img-bg: linear-gradient(135deg, #F5F5F5 0%, #E5E5E5 100%);
+    --card-ov-bg: var(--surface);
+}
+
+/* ============ Theme: OLED Dark ============ */
+[data-theme="oled"] {
+    --primary: #00FF88; --primary-hover: #00CC66;
+    --primary-light: #0A1A0A; --primary-ghost: #0D2D0D;
+    --primary-gradient: linear-gradient(135deg, #00FF88 0%, #00CC66 50%, #00994D 100%);
+    --bg: #000000; --surface: #0D0D0D;
+    --text: #E8E8E8; --text-secondary: #888888;
+    --border: #1F1F1F;
+    --success: #00FF88; --success-light: #0A1A0A;
+    --danger: #FF4444; --danger-light: #1A0A0A;
+    --warn: #FFBB33; --warn-light: #1A1500;
+    --shadow-sm: 0 0 4px rgba(0,255,136,.08);
+    --shadow-md: 0 0 12px rgba(0,255,136,.10);
+    --shadow-lg: 0 0 24px rgba(0,255,136,.12);
+    --shadow-press: 0 0 2px rgba(0,255,136,.06);
+    --radius-sm: 6px; --radius: 10px; --radius-lg: 16px;
+    --font-brand: "Inter","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --transition: 0.15s ease;
+    --nav-blur: 4px;
+    --tag-pos-text: #00FF88;    --tag-pos-bg: #0A1A0A;
+    --tag-neg-text: #FF4444;    --tag-neg-bg: #1A0A0A;
+    --tag-warn-text: #FFBB33;   --tag-warn-bg: #1A1500;
+    --stock-lo: #FF4444;        --stock-md: #FFBB33;        --stock-ok: #00FF88;
+    --btn-hover: #111111;       --btn-active: #1A1A1A;
+    --btn-danger-hover: #1A0A0A;
+    --sell-color: #00FF88;      --sell-hover: #0A1A0A;
+    --free-hover: #0D0D0D;
+    --header-bg: #0A0A0A;
+    --img-bg: linear-gradient(135deg, #0A1A0A 0%, #0D0D0D 100%);
+    --card-ov-bg: #0D0D0D;
+}
+
+/* ============ Theme: Neumorphism ============ */
+[data-theme="neumorph"] {
+    --primary: #7C8EB2; --primary-hover: #5A6E92;
+    --primary-light: #E8ECF2; --primary-ghost: #DCE2EB;
+    --primary-gradient: linear-gradient(135deg, #9AACC8 0%, #7C8EB2 50%, #5A6E92 100%);
+    --bg: #E8ECF2; --surface: #E8ECF2;
+    --text: #3A4050; --text-secondary: #7A8090;
+    --border: transparent;
+    --success: #6BAF7B; --success-light: #E8F2EA;
+    --danger: #D4857B; --danger-light: #F2E8E8;
+    --warn: #C8A86B; --warn-light: #F2EDE0;
+    --shadow-sm: -2px -2px 6px rgba(255,255,255,.8), 2px 2px 6px rgba(166,175,195,.4);
+    --shadow-md: -4px -4px 12px rgba(255,255,255,.9), 4px 4px 12px rgba(166,175,195,.5);
+    --shadow-lg: -6px -6px 20px rgba(255,255,255,.95), 6px 6px 20px rgba(166,175,195,.55);
+    --shadow-press: inset -2px -2px 4px rgba(255,255,255,.5), inset 2px 2px 4px rgba(166,175,195,.3);
+    --radius-sm: 12px; --radius: 18px; --radius-lg: 24px;
+    --font-brand: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --transition: 0.2s ease;
+    --nav-blur: 8px;
+    --tag-pos-text: #3A6B4A;    --tag-pos-bg: #E8F2EA;
+    --tag-neg-text: #8B4A4A;    --tag-neg-bg: #F2E8E8;
+    --tag-warn-text: #7A6030;   --tag-warn-bg: #F2EDE0;
+    --stock-lo: #D4857B;        --stock-md: #C8A86B;        --stock-ok: #6BAF7B;
+    --btn-hover: #DCE2EB;       --btn-active: #CFD7E2;
+    --btn-danger-hover: #F2E8E8;
+    --sell-color: #5A6E92;      --sell-hover: #DCE2EB;
+    --free-hover: #DCE2EB;
+    --header-bg: #DCE2EB;
+    --img-bg: linear-gradient(135deg, #DCE2EB 0%, #CFD7E2 100%);
+    --card-ov-bg: #E8ECF2;
+}
+
+/* ============ Theme: Vaporwave ============ */
+[data-theme="vapor"] {
+    --primary: #FF71CE; --primary-hover: #FF4DB8;
+    --primary-light: #1A1020; --primary-ghost: #2D1B35;
+    --primary-gradient: linear-gradient(135deg, #FF71CE 0%, #01CDFE 50%, #B967FF 100%);
+    --bg: #0D0221; --surface: #12062E;
+    --text: #E8D5F5; --text-secondary: #01CDFE;
+    --border: #2D1050;
+    --success: #05FFA1; --success-light: #0A2A1A;
+    --danger: #FF2D6B; --danger-light: #2A0A15;
+    --warn: #FFD700; --warn-light: #2A2000;
+    --shadow-sm: 0 0 12px rgba(255,113,206,.15);
+    --shadow-md: 0 0 24px rgba(1,205,254,.15);
+    --shadow-lg: 0 0 48px rgba(185,103,255,.18);
+    --shadow-press: 0 0 6px rgba(255,113,206,.08), inset 0 2px 4px rgba(0,0,0,.3);
+    --radius-sm: 8px; --radius: 14px; --radius-lg: 22px;
+    --font-brand: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+    --nav-blur: 8px;
+    --tag-pos-text: #05FFA1;    --tag-pos-bg: #0A2A1A;
+    --tag-neg-text: #FF2D6B;    --tag-neg-bg: #2A0A15;
+    --tag-warn-text: #FFD700;   --tag-warn-bg: #2A2000;
+    --stock-lo: #FF2D6B;        --stock-md: #FFD700;        --stock-ok: #05FFA1;
+    --btn-hover: #1A0A30;       --btn-active: #2D1545;
+    --btn-danger-hover: #2A0A15;
+    --sell-color: #FF71CE;      --sell-hover: #1A0A30;
+    --free-hover: #12062E;
+    --header-bg: #0F0425;
+    --img-bg: linear-gradient(135deg, #1A0A30 0%, #12062E 100%);
+    --card-ov-bg: #150830;
+}
+
+/* ============ Theme: Pastel Candy ============ */
+[data-theme="candy"] {
+    --primary: #FF8FAB; --primary-hover: #FF6B8A;
+    --primary-light: #FFF0F5; --primary-ghost: #FFE0EB;
+    --primary-gradient: linear-gradient(135deg, #FF8FAB 0%, #FFC0CB 50%, #FFB6C1 100%);
+    --bg: #FFFAFB; --surface: #FFFFFF;
+    --text: #5D3A4A; --text-secondary: #B08090;
+    --border: #FFE0EB;
+    --success: #7ECB9A; --success-light: #F0FFF4;
+    --danger: #FF7B8A; --danger-light: #FFF0F3;
+    --warn: #FFD89B; --warn-light: #FFFBF0;
+    --shadow-sm: 0 2px 8px rgba(255,143,171,.10);
+    --shadow-md: 0 4px 16px rgba(255,143,171,.12);
+    --shadow-lg: 0 8px 28px rgba(255,143,171,.14);
+    --shadow-press: inset 0 2px 4px rgba(255,143,171,.08);
+    --radius-sm: 14px; --radius: 22px; --radius-lg: 30px;
+    --font-brand: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+    --nav-blur: 12px;
+    --tag-pos-text: #3A6B4A;    --tag-pos-bg: #F0FFF4;
+    --tag-neg-text: #8B4A5A;    --tag-neg-bg: #FFF0F3;
+    --tag-warn-text: #8B6D3A;   --tag-warn-bg: #FFFBF0;
+    --stock-lo: #FF7B8A;        --stock-md: #FFD89B;        --stock-ok: #7ECB9A;
+    --btn-hover: #FFF0F5;       --btn-active: #FFE0EB;
+    --btn-danger-hover: #FFF0F3;
+    --sell-color: #FF6B8A;      --sell-hover: #FFF0F5;
+    --free-hover: #FFF5F7;
+    --header-bg: #FFF5F7;
+    --img-bg: linear-gradient(135deg, #FFF0F5 0%, #FFE0EB 100%);
+    --card-ov-bg: var(--surface);
+}
+
+/* ============ Theme: Vintage Film ============ */
+[data-theme="film"] {
+    --primary: #D4A574; --primary-hover: #B8895A;
+    --primary-light: #F5E6C8; --primary-ghost: #EBD9B8;
+    --primary-gradient: linear-gradient(135deg, #D4A574 0%, #C4956A 50%, #A8784A 100%);
+    --bg: #F5E6C8; --surface: #FDF5E6;
+    --text: #4A3525; --text-secondary: #8B7355;
+    --border: #E0C8A0;
+    --success: #6B8B5A; --success-light: #F0F5EB;
+    --danger: #B85A5A; --danger-light: #FBF0F0;
+    --warn: #B8955A; --warn-light: #FBF5F0;
+    --shadow-sm: 1px 1px 0 rgba(139,115,85,.15);
+    --shadow-md: 2px 3px 0 rgba(139,115,85,.18);
+    --shadow-lg: 3px 5px 0 rgba(139,115,85,.20);
+    --shadow-press: 0 0 0 rgba(139,115,85,.1);
+    --radius-sm: 4px; --radius: 6px; --radius-lg: 10px;
+    --font-brand: "Lora","PingFang SC","Microsoft YaHei",Georgia,serif;
+    --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --transition: 0.2s ease;
+    --nav-blur: 4px;
+    --tag-pos-text: #4A6B3A;    --tag-pos-bg: #F0F5EB;
+    --tag-neg-text: #8B4A4A;    --tag-neg-bg: #FBF0F0;
+    --tag-warn-text: #8B6D3A;   --tag-warn-bg: #FBF5F0;
+    --stock-lo: #B85A5A;        --stock-md: #B8955A;        --stock-ok: #6B8B5A;
+    --btn-hover: #F0E4D0;       --btn-active: #EBD9B8;
+    --btn-danger-hover: #FBF0F0;
+    --sell-color: #8B6D3A;      --sell-hover: #F0E4D0;
+    --free-hover: #F5E6C8;
+    --header-bg: #F0E4D0;
+    --img-bg: linear-gradient(135deg, #F0E4D0 0%, #EBD9B8 100%);
+    --card-ov-bg: #FDF5E6;
+}
+
+/* ============ Theme: Ocean Blue ============ */
+[data-theme="ocean"] {
+    --primary: #0EA5E9; --primary-hover: #0284C7;
+    --primary-light: #F0F9FF; --primary-ghost: #E0F2FE;
+    --primary-gradient: linear-gradient(135deg, #38BDF8 0%, #0EA5E9 50%, #0284C7 100%);
+    --bg: #F8FAFC; --surface: #FFFFFF;
+    --text: #0C4A6E; --text-secondary: #0C4A6E;
+    --border: #BAE6FD;
+    --success: #10B981; --success-light: #ECFDF5;
+    --danger: #EF4444; --danger-light: #FEF2F2;
+    --warn: #F59E0B; --warn-light: #FFF7ED;
+    --shadow-sm: 0 2px 8px rgba(14,165,233,.08);
+    --shadow-md: 0 4px 16px rgba(14,165,233,.10);
+    --shadow-lg: 0 8px 28px rgba(14,165,233,.12);
+    --shadow-press: inset 0 2px 4px rgba(14,165,233,.06);
+    --radius-sm: 10px; --radius: 16px; --radius-lg: 24px;
+    --font-brand: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+    --nav-blur: 12px;
+    --tag-pos-text: #065F46;    --tag-pos-bg: #ECFDF5;
+    --tag-neg-text: #991B1B;    --tag-neg-bg: #FEF2F2;
+    --tag-warn-text: #92400E;   --tag-warn-bg: #FFF7ED;
+    --stock-lo: #EF4444;        --stock-md: #F59E0B;        --stock-ok: #10B981;
+    --btn-hover: #F0F9FF;       --btn-active: #E0F2FE;
+    --btn-danger-hover: #FEF2F2;
+    --sell-color: #0284C7;      --sell-hover: #F0F9FF;
+    --free-hover: #F8FAFC;
+    --header-bg: #F0F9FF;
+    --img-bg: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+    --card-ov-bg: var(--surface);
+}
+
+/* ============ Theme: Midnight Gold ============ */
+[data-theme="luxe"] {
+    --primary: #D4AF37; --primary-hover: #C5A028;
+    --primary-light: #1A1A2E; --primary-ghost: #2D2A3E;
+    --primary-gradient: linear-gradient(135deg, #F0D060 0%, #D4AF37 50%, #A88820 100%);
+    --bg: #0A0A16; --surface: #12122A;
+    --text: #E0D8C8; --text-secondary: #A09080;
+    --border: #2A2840;
+    --success: #4ADE80; --success-light: #0A1A10;
+    --danger: #FB7185; --danger-light: #1A0A0E;
+    --warn: #FBBF24; --warn-light: #1A1500;
+    --shadow-sm: 0 2px 8px rgba(212,175,55,.06);
+    --shadow-md: 0 4px 20px rgba(212,175,55,.08);
+    --shadow-lg: 0 8px 36px rgba(212,175,55,.10);
+    --shadow-press: 0 1px 2px rgba(212,175,55,.04);
+    --radius-sm: 8px; --radius: 14px; --radius-lg: 22px;
+    --font-brand: "Cormorant","PingFang SC","Microsoft YaHei",Georgia,serif;
+    --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+    --nav-blur: 12px;
+    --tag-pos-text: #4ADE80;    --tag-pos-bg: #0A1A10;
+    --tag-neg-text: #FB7185;    --tag-neg-bg: #1A0A0E;
+    --tag-warn-text: #FBBF24;   --tag-warn-bg: #1A1500;
+    --stock-lo: #FB7185;        --stock-md: #FBBF24;        --stock-ok: #4ADE80;
+    --btn-hover: #161630;       --btn-active: #202040;
+    --btn-danger-hover: #1A0A0E;
+    --sell-color: #D4AF37;      --sell-hover: #161630;
+    --free-hover: #0E0E22;
+    --header-bg: #0E0E22;
+    --img-bg: linear-gradient(135deg, #161630 0%, #12122A 100%);
+    --card-ov-bg: #161630;
+}
+
+/* ============ Theme: Zen Garden ============ */
+[data-theme="zen"] {
+    --primary: #8B7355; --primary-hover: #6B5A4A;
+    --primary-light: #F5F0E8; --primary-ghost: #EBE0D5;
+    --primary-gradient: linear-gradient(135deg, #A0886A 0%, #8B7355 50%, #6B5A4A 100%);
+    --bg: #F5F0E8; --surface: #FDF9F3;
+    --text: #3A3028; --text-secondary: #8B7D6B;
+    --border: #D4C8B8;
+    --success: #6B8B6B; --success-light: #F0F5F0;
+    --danger: #B86B6B; --danger-light: #FBF0F0;
+    --warn: #B8A06B; --warn-light: #FBF5F0;
+    --shadow-sm: 0 2px 8px rgba(139,115,85,.06);
+    --shadow-md: 0 4px 16px rgba(139,115,85,.08);
+    --shadow-lg: 0 8px 28px rgba(139,115,85,.10);
+    --shadow-press: inset 0 2px 4px rgba(139,115,85,.06);
+    --radius-sm: 8px; --radius: 14px; --radius-lg: 20px;
+    --font-brand: "PingFang SC","Microsoft YaHei","Noto Serif SC",Georgia,serif;
+    --font-body: "PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+    --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+    --nav-blur: 8px;
+    --tag-pos-text: #4A6B4A;    --tag-pos-bg: #F0F5F0;
+    --tag-neg-text: #8B4A4A;    --tag-neg-bg: #FBF0F0;
+    --tag-warn-text: #8B7D3A;   --tag-warn-bg: #FBF5F0;
+    --stock-lo: #B86B6B;        --stock-md: #B8A06B;        --stock-ok: #6B8B6B;
+    --btn-hover: #F0E8DC;       --btn-active: #EBE0D5;
+    --btn-danger-hover: #FBF0F0;
+    --sell-color: #6B5A4A;      --sell-hover: #F0E8DC;
+    --free-hover: #F5F0E8;
+    --header-bg: #F0E8DC;
+    --img-bg: linear-gradient(135deg, #F0E8DC 0%, #EBE0D5 100%);
+    --card-ov-bg: #FDF9F3;
+}
+
+/* ============ Theme: Neon Pop ============ */
+[data-theme="pop"] {
+    --primary: #FF006E; --primary-hover: #DB0060;
+    --primary-light: #1A0A10; --primary-ghost: #2D1520;
+    --primary-gradient: linear-gradient(135deg, #FF006E 0%, #FF6B00 50%, #FFD700 100%);
+    --bg: #0F0F1A; --surface: #181830;
+    --text: #F0F0FF; --text-secondary: #A0A0D0;
+    --border: #303050;
+    --success: #00FF88; --success-light: #0A1A10;
+    --danger: #FF3366; --danger-light: #1A0A10;
+    --warn: #FFCC00; --warn-light: #1A1500;
+    --shadow-sm: 0 0 8px rgba(255,0,110,.10);
+    --shadow-md: 0 0 20px rgba(255,0,110,.15);
+    --shadow-lg: 0 0 36px rgba(255,0,110,.20);
+    --shadow-press: 0 0 4px rgba(255,0,110,.06);
+    --radius-sm: 8px; --radius: 14px; --radius-lg: 22px;
+    --font-brand: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --transition: 0.15s ease-out;
+    --nav-blur: 8px;
+    --tag-pos-text: #00FF88;    --tag-pos-bg: #0A1A10;
+    --tag-neg-text: #FF3366;    --tag-neg-bg: #1A0A10;
+    --tag-warn-text: #FFCC00;   --tag-warn-bg: #1A1500;
+    --stock-lo: #FF3366;        --stock-md: #FFCC00;        --stock-ok: #00FF88;
+    --btn-hover: #202040;       --btn-active: #303060;
+    --btn-danger-hover: #1A0A10;
+    --sell-color: #FF6B00;      --sell-hover: #202040;
+    --free-hover: #181830;
+    --header-bg: #141428;
+    --img-bg: linear-gradient(135deg, #202040 0%, #181830 100%);
+    --card-ov-bg: #202040;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

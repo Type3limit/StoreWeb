@@ -588,6 +588,46 @@ const App = {
         {
             id: 'brutal', name: 'Brutalism', desc: '粗野主义 · 直边高对比 · 极简硬核',
             swatches: ['#0F172A', '#FFFFFF', '#020617', '#020617']
+        },
+        {
+            id: 'swiss', name: 'Swiss Minimal', desc: '极简瑞士 · 黑白高对比 · 零修饰',
+            swatches: ['#000000', '#FAFAFA', '#FFFFFF', '#000000']
+        },
+        {
+            id: 'oled', name: 'OLED Dark', desc: '纯黑护眼 · 霓虹绿点缀 · 省电优化',
+            swatches: ['#00FF88', '#000000', '#0D0D0D', '#E8E8E8']
+        },
+        {
+            id: 'neumorph', name: 'Neumorphism', desc: '新拟态 · 柔和浮雕 · 淡雅灰调',
+            swatches: ['#7C8EB2', '#E8ECF2', '#E8ECF2', '#3A4050']
+        },
+        {
+            id: 'vapor', name: 'Vaporwave', desc: '蒸汽波 · 粉紫渐变 · 80年代霓虹',
+            swatches: ['#FF71CE', '#0D0221', '#12062E', '#E8D5F5']
+        },
+        {
+            id: 'candy', name: 'Pastel Candy', desc: '糖果色 · 甜粉温柔 · 少女心爆棚',
+            swatches: ['#FF8FAB', '#FFFAFB', '#FFFFFF', '#5D3A4A']
+        },
+        {
+            id: 'film', name: 'Vintage Film', desc: '复古胶片 · 棕褐暖调 · 岁月质感',
+            swatches: ['#D4A574', '#F5E6C8', '#FDF5E6', '#4A3525']
+        },
+        {
+            id: 'ocean', name: 'Ocean Blue', desc: '海洋蓝调 · 清爽透亮 · 自由呼吸',
+            swatches: ['#0EA5E9', '#F8FAFC', '#FFFFFF', '#0C4A6E']
+        },
+        {
+            id: 'luxe', name: 'Midnight Gold', desc: '暗夜金 · 奢华暗色 · 高端质感',
+            swatches: ['#D4AF37', '#0A0A16', '#12122A', '#E0D8C8']
+        },
+        {
+            id: 'zen', name: 'Zen Garden', desc: '禅意 · 素雅大地色 · 平和安宁',
+            swatches: ['#8B7355', '#F5F0E8', '#FDF9F3', '#3A3028']
+        },
+        {
+            id: 'pop', name: 'Neon Pop', desc: '霓虹爆炸 · 荧光橙粉 · 高能活力',
+            swatches: ['#FF006E', '#0F0F1A', '#181830', '#F0F0FF']
         }
     ],
 
