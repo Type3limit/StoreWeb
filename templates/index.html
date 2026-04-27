@@ -6,6 +6,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F59E0B">
+<link rel="manifest" href="static/manifest.json">
 <title>StoreWeb - 仓储管理</title>
 <link rel="stylesheet" href="static/css/style.css">
 </head>
@@ -65,7 +67,10 @@
   <section id="tab-products" class="tab-panel">
     <div class="toolbar">
       <input type="text" class="input" id="product-search" placeholder="搜索商品名称或分类...">
-      <button class="btn btn-primary" id="btn-add-product">+ 添加商品</button>
+      <div class="btn-group">
+        <button class="btn" id="btn-batch-price">全场调价</button>
+        <button class="btn btn-primary" id="btn-add-product">+ 添加商品</button>
+      </div>
     </div>
     <div class="card">
       <div class="card-body table-wrap">

@@ -13,11 +13,31 @@ const App = {
 
     init() {
         this.loadSavedTheme();
+        this.registerSW();
         this.bindTabs();
         this.bindProducts();
         this.bindStock();
         this.bindSales();
         this.loadOverview();
+    },
+
+    registerSW() {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register(APP_BASE + 'static/sw.js');
+        }
+    },
+
+    buzz() {
+        if (navigator.vibrate) navigator.vibrate(15);
+    },
+
+    notify(title, body) {
+        if (!('Notification' in window)) return;
+        if (Notification.permission === 'granted') {
+            new Notification(title, { body, icon: APP_BASE + 'static/manifest.json' });
+        } else if (Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
     },
 
     loadSavedTheme() {
@@ -324,6 +344,7 @@ const App = {
             }
 
             this.closeModal();
+            this.buzz();
             let parts = [];
             if (sellQ > 0) parts.push(`售出×${sellQ} ¥${(price * sellQ).toFixed(2)}`);
             if (freeQ > 0) parts.push(`赠送×${freeQ}`);
@@ -336,10 +357,10 @@ const App = {
     async loadDashboard() {
         const data = await this.api('/api/dashboard');
         $('#stats').innerHTML = [
-            { label: '商品总数', value: data.total_products, cls: '' },
             { label: '今日销售额', value: `¥${data.today_sales}`, cls: 'accent' },
-            { label: '今日毛利', value: `¥${data.today_profit}`, cls: 'accent' },
-            { label: '今日赠品', value: `${data.today_giveaways} 件`, cls: '' },
+            { label: '昨日对比', value: `¥${data.yesterday_sales}`, cls: '' },
+            { label: '本周累计', value: `¥${data.week_sales}`, cls: '' },
+            { label: '本月累计', value: `¥${data.month_sales}`, cls: 'accent' },
         ].map(s => `<div class="stat-card ${s.cls}"><span class="stat-label">${s.label}</span><span class="stat-value">${s.value}</span></div>`).join('');
 
         // Settlement
@@ -353,6 +374,12 @@ const App = {
                 <div class="settle-item"><span class="settle-label">库存总值</span><span class="settle-val">¥${data.total_stock_value}</span></div>
             </div>
         `;
+
+        // Low stock notification
+        if (data.low_stock.length > 0) {
+            const names = data.low_stock.map(p => `${p.name}(${p.stock})`).join('、');
+            this.notify('低库存预警', `${names} 库存不足`);
+        }
 
         // Top products
         const tp = data.top_products;
@@ -451,6 +478,7 @@ const App = {
 
     bindProducts() {
         $('#btn-add-product').addEventListener('click', () => this.showProductForm());
+        $('#btn-batch-price').addEventListener('click', () => this.showBatchPrice());
         $('#product-search').addEventListener('input', () => this.loadProducts());
         $('#product-list').addEventListener('click', e => this._handleProductAction(e));
         $('#product-cards').addEventListener('click', e => this._handleProductAction(e));
@@ -619,8 +647,50 @@ const App = {
             method: 'POST',
             body: JSON.stringify({ product_id: parseInt(pid), type, quantity: qty, note: '' })
         });
+        this.buzz();
         this.loadStockRecords();
         this.toast(type === 'in' ? '已入库 +1' : '已出库 -1');
+    },
+
+    // ---- Batch Price ----
+    bindBatchPrice() {
+        const btn = $('#btn-batch-price');
+        if (btn) btn.addEventListener('click', () => this.showBatchPrice());
+    },
+
+    showBatchPrice() {
+        this.openModal(`<h3>全场调价</h3>
+            <div class="form-group"><label>折扣率</label>
+                <div class="qty-row"><div class="qty-stepper">
+                    <button class="qty-btn" id="disc-minus">−</button>
+                    <input class="qty-val" id="disc-val" type="number" value="100" min="1" max="100" style="width:64px">
+                    <button class="qty-btn" id="disc-plus">+</button>
+                </div><span style="font-size:16px;font-weight:700;margin-left:8px">%</span></div>
+            </div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">
+                例如输入 <b>80</b> = 全部打八折 &nbsp; 输入 <b>120</b> = 涨价 20%
+            </div>
+            <div class="btn-row">
+                <button class="btn" id="btn-cancel">取消</button>
+                <button class="btn btn-primary" id="btn-apply">确认调价</button>
+            </div>
+        `);
+        const getVal = () => parseInt($('#disc-val').value) || 100;
+        const clamp = v => Math.max(1, Math.min(200, v));
+        $('#disc-minus').addEventListener('click', () => $('#disc-val').value = clamp(getVal() - 5));
+        $('#disc-plus').addEventListener('click', () => $('#disc-val').value = clamp(getVal() + 5));
+        $('#btn-cancel').addEventListener('click', () => this.closeModal());
+        $('#btn-apply').addEventListener('click', async () => {
+            const pct = getVal();
+            if (pct <= 0) return this.toast('请输入有效折扣', 'error');
+            if (!confirm(`确定将所有商品售价调整为原价的 ${pct}% ？`)) return;
+            await this.api('/api/products/batch-price', { method: 'PUT', body: JSON.stringify({ percent: pct }) });
+            this.closeModal();
+            this.buzz();
+            this.toast(`全场售价已调整为 ${pct}%`);
+            this.loadProducts();
+            this.loadOverview();
+        });
     },
 
     async showStockForm(preSelectPid = null) {

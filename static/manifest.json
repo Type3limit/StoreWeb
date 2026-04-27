@@ -1,0 +1,9 @@
+{
+    "name": "StoreWeb 仓储管理",
+    "short_name": "StoreWeb",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#FEF7F2",
+    "theme_color": "#F59E0B",
+    "icons": []
+}

@@ -143,6 +143,17 @@ def dashboard():
         (today,)
     ).fetchall()
 
+    # Period comparisons
+    yesterday_sales = conn.execute(
+        "SELECT COALESCE(SUM(total_price),0) FROM sales WHERE date(created_at)=date('now','-1 day')"
+    ).fetchone()[0]
+    week_sales = conn.execute(
+        "SELECT COALESCE(SUM(total_price),0) FROM sales WHERE date(created_at)>=date('now','weekday 0','-6 days')"
+    ).fetchone()[0]
+    month_sales = conn.execute(
+        "SELECT COALESCE(SUM(total_price),0) FROM sales WHERE strftime('%Y-%m',created_at)=strftime('%Y-%m','now')"
+    ).fetchone()[0]
+
     conn.close()
     return jsonify({
         'total_products': total_products,
@@ -153,6 +164,9 @@ def dashboard():
         'today_cost': round(today_cost, 2),
         'today_profit': round(today_sales - today_cost, 2),
         'today_giveaways': today_giveaways or 0,
+        'yesterday_sales': round(yesterday_sales, 2),
+        'week_sales': round(week_sales, 2),
+        'month_sales': round(month_sales, 2),
         'low_stock': [dict(r) for r in low_stock],
         'recent_sales': [dict(r) for r in recent_sales],
         'top_products': [dict(r) for r in top_products]
@@ -190,6 +204,24 @@ def export_sales():
     output.close()
     return Response(csv_data, mimetype='text/csv',
                     headers={'Content-Disposition': 'attachment;filename=sales.csv'})
+
+
+# ---- Batch Price Update ----
+@app.route('/api/products/batch-price', methods=['PUT'])
+def batch_price():
+    data = request.get_json()
+    percent = data.get('percent', 100)
+    if percent <= 0:
+        return jsonify({'error': '折扣率必须大于0'}), 400
+    conn = get_db()
+    conn.execute(
+        "UPDATE products SET sell_price = ROUND(sell_price * ? / 100, 2), updated_at = CURRENT_TIMESTAMP",
+        (percent,)
+    )
+    count = conn.execute("SELECT COUNT(*) FROM products").fetchone()[0]
+    conn.commit()
+    conn.close()
+    return jsonify({'message': f'已更新 {count} 件商品售价', 'count': count})
 
 
 # ---- Products ----
