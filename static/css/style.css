@@ -560,6 +560,74 @@
     --card-ov-bg: #202040;
 }
 
+/* ============ Theme: Rose Romance ============ */
+[data-theme="rose"] {
+    --primary: #E11D48; --primary-hover: #BE123C;
+    --primary-light: #FFF1F2; --primary-ghost: #FFE4E6;
+    --primary-gradient: linear-gradient(135deg, #FB7185 0%, #E11D48 50%, #BE123C 100%);
+    --bg: #FFF1F2; --surface: #FFFAFB;
+    --text: #881337; --text-secondary: #9D5B6B;
+    --border: #FFE4E6;
+    --success: #10B981; --success-light: #ECFDF5;
+    --danger: #E11D48; --danger-light: #FFF1F2;
+    --warn: #F97316; --warn-light: #FFF7ED;
+    --shadow-sm: 0 2px 8px rgba(225,29,72,.06);
+    --shadow-md: 0 4px 16px rgba(225,29,72,.08);
+    --shadow-lg: 0 8px 28px rgba(225,29,72,.10);
+    --shadow-press: inset 0 2px 4px rgba(225,29,72,.06);
+    --radius-sm: 10px; --radius: 16px; --radius-lg: 24px;
+    --font-brand: 'Nunito',"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+    --nav-bg: rgba(255,250,251,.85);
+    --nav-blur: 12px;
+    --tag-pos-text: #065F46;    --tag-pos-bg: #ECFDF5;
+    --tag-neg-text: #991B1B;    --tag-neg-bg: #FEF2F2;
+    --tag-warn-text: #92400E;   --tag-warn-bg: #FFF7ED;
+    --stock-lo: #E11D48;        --stock-md: #F97316;        --stock-ok: #10B981;
+    --btn-hover: #FFF1F2;       --btn-active: #FFE4E6;
+    --btn-danger-hover: #FFF1F2;
+    --sell-color: #BE123C;      --sell-hover: #FFF1F2;
+    --free-hover: #FFF1F2;
+    --header-bg: #FFF1F2;
+    --img-bg: linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 100%);
+    --card-ov-bg: var(--surface);
+}
+
+/* ============ Theme: Sakura ============ */
+[data-theme="sakura"] {
+    --primary: #EC4899; --primary-hover: #DB2777;
+    --primary-light: #FDF2F8; --primary-ghost: #FCE7F3;
+    --primary-gradient: linear-gradient(135deg, #F472B6 0%, #EC4899 50%, #DB2777 100%);
+    --bg: #FDF2F8; --surface: #FFFAFD;
+    --text: #831843; --text-secondary: #9D5B7B;
+    --border: #FCE7F3;
+    --success: #10B981; --success-light: #ECFDF5;
+    --danger: #EF4444; --danger-light: #FEF2F2;
+    --warn: #F59E0B; --warn-light: #FFF7ED;
+    --shadow-sm: 0 2px 8px rgba(236,72,153,.06);
+    --shadow-md: 0 4px 16px rgba(236,72,153,.08);
+    --shadow-lg: 0 8px 28px rgba(236,72,153,.10);
+    --shadow-press: inset 0 2px 4px rgba(236,72,153,.06);
+    --radius-sm: 12px; --radius: 20px; --radius-lg: 28px;
+    --font-brand: "PingFang SC","Microsoft YaHei","Noto Serif SC",Georgia,serif;
+    --font-body: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+    --nav-bg: rgba(255,250,253,.85);
+    --nav-blur: 12px;
+    --tag-pos-text: #065F46;    --tag-pos-bg: #ECFDF5;
+    --tag-neg-text: #991B1B;    --tag-neg-bg: #FEF2F2;
+    --tag-warn-text: #92400E;   --tag-warn-bg: #FFF7ED;
+    --stock-lo: #EF4444;        --stock-md: #F59E0B;        --stock-ok: #10B981;
+    --btn-hover: #FDF2F8;       --btn-active: #FCE7F3;
+    --btn-danger-hover: #FEF2F2;
+    --sell-color: #DB2777;      --sell-hover: #FDF2F8;
+    --free-hover: #FDF2F8;
+    --header-bg: #FDF2F8;
+    --img-bg: linear-gradient(135deg, #FDF2F8 0%, #FCE7F3 100%);
+    --card-ov-bg: var(--surface);
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {

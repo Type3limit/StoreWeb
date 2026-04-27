@@ -871,6 +871,14 @@ const App = {
         {
             id: 'pop', name: 'Neon Pop', desc: '霓虹爆炸 · 荧光橙粉 · 高能活力',
             swatches: ['#FF006E', '#0F0F1A', '#181830', '#F0F0FF']
+        },
+        {
+            id: 'rose', name: 'Rose Romance', desc: '浪漫玫瑰 · 暖粉柔红 · 甜蜜温柔',
+            swatches: ['#E11D48', '#FFF1F2', '#FFFAFB', '#881337']
+        },
+        {
+            id: 'sakura', name: 'Sakura', desc: '樱花粉 · 和风衬线 · 优雅日系',
+            swatches: ['#EC4899', '#FDF2F8', '#FFFAFD', '#831843']
         }
     ],
 
