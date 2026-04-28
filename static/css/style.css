@@ -1121,6 +1121,52 @@ input[type="file"] { padding: 9px 12px; }
     background-clip: text;
 }
 
+/* Cart FAB */
+.cart-fab {
+    position: fixed; bottom: 24px; right: 20px; z-index: 150;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--primary-gradient);
+    color: #fff; font-size: 14px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: var(--shadow-lg);
+    transition: transform var(--transition); border: none;
+}
+.cart-fab:hover { transform: scale(1.08); }
+.cart-fab:active { transform: scale(.95); }
+.cart-fab.has-items { animation: cartBounce .3s ease; }
+@keyframes cartBounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+
+/* Cart modal */
+.cart-item {
+    display: flex; align-items: center; gap: 10px; padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+.cart-item:last-child { border-bottom: none; }
+.cart-item-info { flex: 1; min-width: 0; }
+.cart-item-name { font-size: 14px; font-weight: 700; }
+.cart-item-price { font-size: 12px; color: var(--text-secondary); }
+.cart-item-qty { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.cart-item-qty .qty-btn { width: 32px; height: 32px; font-size: 16px; }
+.cart-item-qty .qty-val { width: 40px; height: 32px; font-size: 14px; }
+.cart-item-type { margin-left: 4px; flex-shrink: 0; }
+.cart-item-type select { font-size: 11px; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text); min-height: auto; }
+.cart-item-remove {
+    width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text-secondary); cursor: pointer;
+    font-size: 14px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all var(--transition);
+}
+.cart-item-remove:hover { background: var(--tag-neg-bg); color: var(--stock-lo); border-color: #FECACA; }
+
+.cart-summary {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 20px; margin-top: 12px;
+    background: var(--primary-light); border: 2px solid var(--primary-ghost);
+    border-radius: var(--radius);
+}
+.cart-summary-label { font-size: 14px; font-weight: 600; color: var(--text-secondary); }
+.cart-summary-total { font-size: 28px; font-weight: 800; }
+
 .empty { text-align: center; padding: 40px 16px; color: var(--text-secondary); font-size: 14px; }
 
 /* ---- Help Page ---- */

@@ -18,13 +18,175 @@ const App = {
         this.bindProducts();
         this.bindStock();
         this.bindSales();
+        this.bindCart();
         this.loadOverview();
+    },
+
+    bindCart() {
+        const fab = $('#cart-fab');
+        if (fab) fab.addEventListener('click', () => this.showCart());
     },
 
     registerSW() {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register(APP_BASE + 'sw.js', { scope: APP_BASE });
         }
+    },
+
+    cart: [],
+
+    addToCart(product, qty = 1, type = 'sale') {
+        const exist = this.cart.find(c => c.product.id === product.id && c.type === type);
+        if (exist) {
+            const total = exist.qty + qty;
+            if (total > product.stock) return this.toast('库存不足', 'error');
+            exist.qty = total;
+        } else {
+            if (qty > product.stock) return this.toast('库存不足', 'error');
+            this.cart.push({ product, qty, type });
+        }
+        this.updateCartBadge();
+        this.toast(`已加入: ${product.name}`);
+    },
+
+    updateCartBadge() {
+        const total = this.cart.reduce((s, c) => s + c.qty, 0);
+        const fab = $('#cart-fab');
+        const cnt = $('#cart-count');
+        if (fab) {
+            fab.style.display = total > 0 ? 'flex' : 'none';
+            if (total > 0) {
+                fab.classList.add('has-items');
+                setTimeout(() => fab.classList.remove('has-items'), 300);
+            }
+        }
+        if (cnt) cnt.textContent = total;
+    },
+
+    showCart() {
+        if (this.cart.length === 0) return;
+        const items = this.cart.map((c, i) => {
+            const p = c.product;
+            const price = c.type === 'free' ? 0 : p.sell_price;
+            const sub = (price * c.qty).toFixed(2);
+            return `<div class="cart-item">
+                <div class="cart-item-info">
+                    <div class="cart-item-name">${this.esc(p.name)}</div>
+                    <div class="cart-item-price">${c.type === 'free' ? '赠送' : '¥'+price.toFixed(2)} / ${this.esc(p.unit)}</div>
+                </div>
+                <div class="cart-item-qty">
+                    <button class="qty-btn cart-minus" data-i="${i}">−</button>
+                    <input class="qty-val cart-qty" data-i="${i}" type="number" value="${c.qty}" min="1" max="${p.stock}">
+                    <button class="qty-btn cart-plus" data-i="${i}">+</button>
+                </div>
+                <div class="cart-item-type">
+                    <select class="cart-type" data-i="${i}">
+                        <option value="sale" ${c.type === 'sale' ? 'selected' : ''}>售出</option>
+                        <option value="free" ${c.type === 'free' ? 'selected' : ''}>赠送</option>
+                    </select>
+                </div>
+                <button class="cart-item-remove" data-i="${i}">✕</button>
+            </div>`;
+        }).join('');
+
+        const total = this.cart.reduce((s, c) => s + (c.type === 'free' ? 0 : c.product.sell_price * c.qty), 0);
+
+        this.openModal(`<h3>购物车</h3>
+            <div style="max-height:50vh;overflow-y:auto">${items}</div>
+            <div class="cart-summary">
+                <span class="cart-summary-label">合计</span>
+                <span class="cart-summary-total">¥${total.toFixed(2)}</span>
+            </div>
+            <div class="btn-row">
+                <button class="btn" id="btn-clear-cart">清空</button>
+                <button class="btn" id="btn-cancel">取消</button>
+                <button class="btn btn-primary" id="btn-checkout">确认结算</button>
+            </div>
+        `);
+
+        const refreshCart = () => {
+            let total = 0;
+            this.cart.forEach((c, i) => {
+                const price = c.type === 'free' ? 0 : c.product.sell_price;
+                total += price * c.qty;
+                $(`.cart-qty[data-i="${i}"]`).value = c.qty;
+                $(`.cart-type[data-i="${i}"]`).value = c.type;
+                const nameEl = $(`.cart-item[data-i]`); // won't work easily, just recalc total
+            });
+            total = this.cart.reduce((s, c) => s + (c.type === 'free' ? 0 : c.product.sell_price * c.qty), 0);
+            const el = $('.cart-summary-total');
+            if (el) el.textContent = `¥${total.toFixed(2)}`;
+        };
+
+        // Quantity steppers
+        $$('#modal-box .cart-minus').forEach(b => {
+            b.addEventListener('click', () => {
+                const i = parseInt(b.dataset.i);
+                if (this.cart[i].qty > 1) this.cart[i].qty--;
+                refreshCart();
+            });
+        });
+        $$('#modal-box .cart-plus').forEach(b => {
+            b.addEventListener('click', () => {
+                const i = parseInt(b.dataset.i);
+                if (this.cart[i].qty < this.cart[i].product.stock) this.cart[i].qty++;
+                refreshCart();
+            });
+        });
+        $$('#modal-box .cart-qty').forEach(inp => {
+            inp.addEventListener('input', () => {
+                const i = parseInt(inp.dataset.i);
+                let v = parseInt(inp.value) || 1;
+                v = Math.max(1, Math.min(v, this.cart[i].product.stock));
+                this.cart[i].qty = v;
+                refreshCart();
+            });
+        });
+        $$('#modal-box .cart-type').forEach(sel => {
+            sel.addEventListener('change', () => {
+                const i = parseInt(sel.dataset.i);
+                this.cart[i].type = sel.value;
+                const price = sel.value === 'free' ? 0 : this.cart[i].product.sell_price;
+                const priceEl = $(`.cart-item:nth-child(${i+1}) .cart-item-price`);
+                if (priceEl) priceEl.textContent = sel.value === 'free' ? '赠送' : `¥${price.toFixed(2)} / ${this.esc(this.cart[i].product.unit)}`;
+                refreshCart();
+            });
+        });
+        $$('#modal-box .cart-item-remove').forEach(b => {
+            b.addEventListener('click', () => {
+                const i = parseInt(b.dataset.i);
+                this.cart.splice(i, 1);
+                this.updateCartBadge();
+                this.closeModal();
+                if (this.cart.length > 0) this.showCart();
+            });
+        });
+
+        $('#btn-clear-cart').addEventListener('click', () => {
+            this.cart = [];
+            this.updateCartBadge();
+            this.closeModal();
+        });
+        $('#btn-cancel').addEventListener('click', () => this.closeModal());
+        $('#btn-checkout').addEventListener('click', async () => {
+            for (const c of this.cart) {
+                await this.api('/api/sales', { method: 'POST', body: JSON.stringify({
+                    product_id: c.product.id,
+                    quantity: c.qty,
+                    total_price: c.type === 'free' ? 0 : c.product.sell_price * c.qty,
+                    note: c.type === 'free' ? '赠送' : ''
+                })});
+            }
+            const summary = this.cart.map(c =>
+                `${c.product.name} ×${c.qty}${c.type === 'free' ? ' 赠' : ''}`
+            ).join(', ');
+            this.toast(`已结算: ${summary}`);
+            this.cart = [];
+            this.updateCartBadge();
+            this.closeModal();
+            this.buzz();
+            this.loadOverview();
+        });
     },
 
     buzz() {
@@ -151,9 +313,15 @@ const App = {
             const p = products.find(x => x.id === pid);
             if (!p) return;
             const actionBtn = e.target.closest('.ov-act-btn');
-            const preSell = actionBtn && actionBtn.dataset.action === 'sale' ? 1 : 0;
-            const preFree = actionBtn && actionBtn.dataset.action === 'free' ? 1 : 0;
-            this.showOverviewSale(p, preSell, preFree);
+            if (actionBtn && actionBtn.dataset.action === 'sale') {
+                this.addToCart(p, 1, 'sale');
+                return;
+            }
+            if (actionBtn && actionBtn.dataset.action === 'free') {
+                this.addToCart(p, 1, 'free');
+                return;
+            }
+            this.showOverviewSale(p, 1, 0);
         };
 
         // Context menu / long press for price edit
